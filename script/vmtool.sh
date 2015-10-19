@@ -45,3 +45,7 @@ if [[ $PACKER_BUILDER_TYPE =~ parallels ]]; then
     rm -rf /home/vagrant/prl-tools-lin.iso
     rm -f /home/vagrant/.prlctl_version
 fi
+
+if [[ $PACKER_BUILDER_TYPE =~ libvirt ]]; then
+    echo "==> Doing nothing special"
+fi

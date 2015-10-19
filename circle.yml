@@ -26,4 +26,4 @@ deployment:
   publish:
     branch: master
     commands:
-      - packer push -name=StefanScherer/packer-atlas-example packer-atlas-example_vcloud.json
+      - packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json

@@ -19,7 +19,14 @@ deploying the Vagrant Box to Atlas.
 See the `circle.yml` for details how the glue works. It just installs packer 0.8.1
 and starts the `packer push`.
 
+## RabbitMQ cluster OCF packer template
+
+Builds the Vagrant Box (vbox/libvirt) for Atlas for the clustering features testing.
+
 ## Acknowledgements
 
 The Packer template and provision scripts are based on box-cutter/ubuntu-vm.
 Check out the more up to date version at [github.com/boxcutter](https://github.com/boxcutter).
+
+The Rabbit cluster OCF template and provision scripts in this fork are based on the
+original repo StefanScherer/packer-atlas-example and on the jakobadam/packer-qemu-templates.

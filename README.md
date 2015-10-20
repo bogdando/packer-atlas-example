@@ -1,18 +1,18 @@
-# packer-atlas-example
+# RabbitMQ cluster OCF packer template
 
-[![Circle CI](https://circleci.com/gh/StefanScherer/packer-atlas-example.svg?style=svg)](https://circleci.com/gh/StefanScherer/packer-atlas-example)
-| [Atlas Builds](https://atlas.hashicorp.com/StefanScherer/build-configurations/packer-atlas-example)
-| [Atlas Vagrant Boxes](https://atlas.hashicorp.com/StefanScherer/boxes/packer-atlas-example)
+[![Circle CI](https://circleci.com/gh/bogdando/packer-atlas-example.svg?style=svg)](https://circleci.com/gh/bogdando/packer-atlas-example)
+| [Atlas Builds](https://atlas.hashicorp.com/bogdando/build-configurations/packer-atlas-example)
+| [Atlas Vagrant Boxes](https://atlas.hashicorp.com/bogdando/boxes/rabbitmq-cluster-ocf)
 
-This is an example to build a Vagrant Box with Packer in Atlas.
-See more details in [my blog post](https://stefanscherer.github.io/automate-building-vagrant-boxes-with-atlas/).
+This is a RabbitMQ node template to build a Vagrant Box with Packer in Atlas.
+See more details in [Stefan Scherer's blog post](https://stefanscherer.github.io/automate-building-vagrant-boxes-with-atlas/).
 
 The automated build is triggered by a WebHook in GitHub to start a build in CircleCI
 that triggers a build in Atlas with `packer push`.
 
 ## Packer template
 
-See the `ubuntu1404.json` with the post-processors section with all details about
+See the `rabbitmq-cluster-ocf.json` with the post-processors section with all details about
 deploying the Vagrant Box to Atlas.
 
 ## circle.yml

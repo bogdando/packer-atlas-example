@@ -121,12 +121,12 @@
       "script/update.sh",
       "script/vagrant.sh",
       "script/sshd.sh",
-      "script/ha_stack.sh",
-      "script/rabbitmq.sh",
       "script/vmtool.sh",
       "script/minimize.sh",
       "script/cleanup.sh",
-      "script/cmtool.sh"
+      "script/cmtool.sh",
+      "script/ha_stack.sh",
+      "script/rabbitmq.sh",
     ]
   }],
   "post-processors": [

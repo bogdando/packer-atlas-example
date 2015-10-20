@@ -1,0 +1,4 @@
+*.swp
+*~
+packer_*
+.vagrant

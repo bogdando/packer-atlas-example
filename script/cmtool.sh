@@ -84,9 +84,8 @@ install_puppet()
 
     # Install puppet-librarian
     echo "==> Installing Puppet-librarian ruby gem"
-    gem install librarian-puppet --no-ri --no-rdoc
-    mkdir -p /etc/puppet/modules
-    librarian-puppet install chdir=/etc/puppet/modules    
+    apt-get install -y ruby-dev
+    gem install --force librarian-puppet --no-ri --no-rdoc
 }
 
 install_ansible()

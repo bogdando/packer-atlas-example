@@ -10,18 +10,24 @@ See more details in [Stefan Scherer's blog post](https://stefanscherer.github.io
 The automated build is triggered by a WebHook in GitHub to start a build in CircleCI
 that triggers a build in Atlas with `packer push`.
 
-## Packer template
-
-See the `rabbitmq-cluster-ocf.json` with the post-processors section with all details about
-deploying the Vagrant Box to Atlas.
-
-## circle.yml
+## CircleCI template
 See the `circle.yml` for details how the glue works. It just installs packer 0.8.1
 and starts the `packer push`.
 
 ## RabbitMQ cluster OCF packer template
 
-Builds the Vagrant Box (vbox/libvirt) for Atlas for the clustering features testing.
+Builds the Vagrant Box for Atlas for the rabbitmq clustering features testing.
+See the `rabbitmq-cluster-ocf.json` with the post-processors section with all details about
+deploying the Vagrant Box to Atlas.
+
+## Vagrantfile
+
+Supports libvirt and virtualbox providers.
+Spins up two VM nodes [n1, n2] with predefined IP addressess 10.10.10.2-3/24.
+Creates a corosync cluster with disabled quorum and STONITH.
+Launches a rabbitmq OCF multi-state pacemaker clone which should assemble
+the rabbit cluster automatically.
+Note, may through en error about a bad ssh exit code. Just ignore it.
 
 ## Acknowledgements
 

@@ -81,6 +81,24 @@ install_puppet()
       apt-get install -y puppet-common=$CM_VERSION puppet=$CM_VERSION
     fi
     rm -f ${DEB_NAME}
+
+    # Install puppet-librarian
+    echo "==> Installing Puppet-librarian ruby gem"
+    gem install librarian-puppet --no-ri --no-rdoc
+    mkdir -p /etc/puppet/modules
+    librarian-puppet install chdir=/etc/puppet/modules    
+}
+
+install_ansible()
+{
+    echo "==> Installing Ansible python egg"
+    # TODO(bogdando): maybe this is better:
+    # http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-apt-ubuntu
+    apt-get remove -f python-pip
+    sudo apt-get install -y python-setuptools
+    sudo easy_install pip
+    sudo pip install -U pip
+    sudo pip install ansible
 }
 
 #
@@ -102,6 +120,10 @@ case "${CM}" in
 
   'puppet')
     install_puppet
+    ;;
+
+  'ansible')
+    install_ansible
     ;;
 
   *)

@@ -1,7 +1,7 @@
 # RabbitMQ cluster OCF packer template
 
 [![Circle CI](https://circleci.com/gh/bogdando/packer-atlas-example.svg?style=svg)](https://circleci.com/gh/bogdando/packer-atlas-example)
-| [Atlas Builds](https://atlas.hashicorp.com/bogdando/build-configurations/packer-atlas-example)
+| [Atlas Builds](https://atlas.hashicorp.com/bogdando/build-configurations/rabbitmq-cluster-ocf)
 | [Atlas Vagrant Boxes](https://atlas.hashicorp.com/bogdando/boxes/rabbitmq-cluster-ocf)
 
 This is a RabbitMQ node template to build a Vagrant Box with Packer in Atlas.

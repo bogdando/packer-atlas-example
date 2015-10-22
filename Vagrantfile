@@ -10,7 +10,10 @@ def shell_script(filename, args=[])
 end
 
 # Render a rabbitmq pacemaker primitive configuration
-rabbit_ocf_setup = shell_script("/vagrant/vagrant_script/conf_rabbit_primitive.sh")
+rabbit_primitive_setup = shell_script("/vagrant/vagrant_script/conf_rabbit_primitive.sh")
+
+# FIXME(bogdando) remove rendering rabbitmq OCF script setup after v3.5.7 released
+rabbit_ocf_setup = shell_script("/vagrant/vagrant_script/conf_rabbit_ocf.sh")
 
 # Render hosts entries
 entries = "\"#{IP24NET}.2 n1 n1\""
@@ -35,6 +38,7 @@ Vagrant.configure(2) do |config|
     corosync_setup = shell_script("/vagrant/vagrant_script/conf_corosync.sh", ["#{IP24NET}.2"])
     config.vm.provision "shell", run: "always", inline: corosync_setup, privileged: true
     config.vm.provision "shell", run: "always", inline: rabbit_ocf_setup, privileged: true
+    config.vm.provision "shell", run: "always", inline: rabbit_primitive_setup, privileged: true
   end
 
   SLAVES_COUNT.times do |i|
@@ -49,6 +53,7 @@ Vagrant.configure(2) do |config|
       # wait 10 seconds for the first corosync node
       corosync_setup = shell_script("/vagrant/vagrant_script/conf_corosync.sh", ["#{IP24NET}.#{ip_ind}", 10])
       config.vm.provision "shell", run: "always", inline: corosync_setup, privileged: true
+      config.vm.provision "shell", run: "always", inline: rabbit_ocf_setup, privileged: true
     end
   end
 end

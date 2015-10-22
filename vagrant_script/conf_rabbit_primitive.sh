@@ -38,3 +38,4 @@ delete ubuntu1404
 delete vagrant
 commit force
 EOF
+exit 0

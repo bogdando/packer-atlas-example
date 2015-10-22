@@ -7,6 +7,11 @@ machine:
 dependencies:
   pre:
     - >
+      sudo apt-get install -qq git &&
+      files=$(git diff --name-only HEAD~) &&
+      echo $files | grep -E -q "^script\/|^http\/|^\S+\.json" ||
+      (echo "no build required!" ; exit 1 )
+    - >
       sudo apt-get install -qq wget unzip &&
       sudo mkdir /opt/packer &&
       pushd /opt/packer &&

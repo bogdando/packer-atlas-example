@@ -34,6 +34,7 @@ if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]]; then
     if [[ $VBOX_VERSION = "4.3.10" ]]; then
         ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions
     fi
+    /etc/init.d/vboxadd setup
 fi
 
 if [[ $PACKER_BUILDER_TYPE =~ parallels ]]; then

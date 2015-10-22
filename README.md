@@ -27,7 +27,9 @@ Spins up two VM nodes [n1, n2] with predefined IP addressess 10.10.10.2-3/24.
 Creates a corosync cluster with disabled quorum and STONITH.
 Launches a rabbitmq OCF multi-state pacemaker clone which should assemble
 the rabbit cluster automatically.
-Note, may through en error about a bad ssh exit code. Just ignore it.
+
+Note, the vagrant may through en error about a bad ssh exit code. Just ignore it
+and perform the manual action up for the rest of the nodes (n2, n3, etc.), if required.
 
 ## Acknowledgements
 

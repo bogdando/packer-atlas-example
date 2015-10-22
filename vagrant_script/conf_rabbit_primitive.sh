@@ -17,7 +17,7 @@ wget https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/stable/packaging
 chmod +x /tmp/rabbitmq-server-ha
 cp -f /tmp/rabbitmq-server-ha /usr/lib/ocf/resource.d/rabbitmq/
 
-# create the rabbitmq multi-state primitive
+# create the rabbitmq multi-state primitive, remove old node's names artifact
 crm configure<<EOF
 primitive p_rabbitmq-server ocf:rabbitmq:rabbitmq-server-ha \
         params erlang_cookie=DPMDALGUKEOMPTHWPYKC node_port=5672 \
@@ -34,5 +34,7 @@ ms p_rabbitmq-server-master p_rabbitmq-server \
         meta notify=true ordered=false interleave=true master-max=1 master-node-max=1
 property stonith-enabled=false
 property no-quorum-policy=ignore
+delete ubuntu1404
+delete vagrant
 commit force
 EOF

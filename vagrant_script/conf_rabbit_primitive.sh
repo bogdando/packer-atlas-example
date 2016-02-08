@@ -25,7 +25,7 @@ primitive p_rabbitmq-server ocf:rabbitmq:rabbitmq-server-ha \
         op notify interval=0 timeout=180 \
         meta migration-threshold=10 failure-timeout=30s resource-stickiness=100
 ms p_rabbitmq-server-master p_rabbitmq-server \
-        meta notify=true ordered=false interleave=true master-max=1 master-node-max=1
+        meta notify=true ordered=false interleave=false master-max=1 master-node-max=1
 property stonith-enabled=false
 property no-quorum-policy=ignore
 delete ubuntu1404

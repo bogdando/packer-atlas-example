@@ -20,16 +20,30 @@ Builds the Vagrant Box for Atlas for the rabbitmq clustering features testing.
 See the `rabbitmq-cluster-ocf.json` with the post-processors section with all details about
 deploying the Vagrant Box to Atlas.
 
+Also builds the docker image, though it must be pushed manually (TODO circle CI
+job auth for the dockerhub).
+
 ## Vagrantfile
 
-Supports libvirt and virtualbox providers.
+Supports libvirt, virtualbox, docker providers.
 Spins up two VM nodes [n1, n2] with predefined IP addressess 10.10.10.2-3/24.
 Creates a corosync cluster with disabled quorum and STONITH.
 Launches a rabbitmq OCF multi-state pacemaker clone which should assemble
 the rabbit cluster automatically.
 
-Note, the vagrant may through en error about a bad ssh exit code. Just ignore it
-and perform the manual action up for the rest of the nodes (n2, n3, etc.), if required.
+## Known issues
+
+* For the docker provider, a networking is [not implemented](https://github.com/mitchellh/vagrant/issues/6667)
+  and there is no [docker-exec privisioner](https://github.com/mitchellh/vagrant/issues/4179)
+  to replace the SSH-based one. So I put ugly workarounds all around to make things working.
+
+* Use ``docker rm -f -v`` if ``vagrant destroy`` fails to teardown things.
+
+* The ``vagrant up`` may through en error about a bad ssh exit code. Just ignore it
+  and perform the manual action up for the rest of the nodes (n2, n3, etc.), if required.
+
+* Make sure there is no conflicting host networks exist like `packer-atlas-example0`
+  or `vagrant-libvirt` or the like. Otherwise nodes become isolated from the host system.
 
 ## Acknowledgements
 

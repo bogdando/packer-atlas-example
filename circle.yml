@@ -1,16 +1,14 @@
 machine:
   timezone: Europe/Berlin
+  services:
+    - docker
 
   environment:
     PACKER_VERSION: 0.8.1
+    PUSH: false
 
 dependencies:
   pre:
-    - >
-      sudo apt-get install -qq git &&
-      files=$(git diff --name-only HEAD~) &&
-      echo $files | grep -E -q "^script\/|^http\/|^\S+\.json" ||
-      (echo "no build required!" ; exit 1 )
     - >
       sudo apt-get install -qq wget unzip &&
       sudo mkdir /opt/packer &&
@@ -31,4 +29,5 @@ deployment:
   publish:
     branch: master
     commands:
-      - packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json
+      - [ "${PUSH}" = "true" ] && docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - [ "${PUSH}" = "true" ] && packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json

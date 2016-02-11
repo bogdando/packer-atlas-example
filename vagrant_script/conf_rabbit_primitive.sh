@@ -1,7 +1,4 @@
 #!/bin/sh
-# Configures the rabbitmq OCF primitive
-# Removes artificial nodes from the CIB.
-
 # wait for the crmd to become ready
 count=0
 while [ $count -lt 160 ]
@@ -31,11 +28,8 @@ ms p_rabbitmq-server-master p_rabbitmq-server \
         meta notify=true ordered=false interleave=false master-max=1 master-node-max=1
 property stonith-enabled=false
 property no-quorum-policy=ignore
+delete ubuntu1404
+delete vagrant
 commit force
 EOF
-
-# Remove artificial nodes from CIB
-crm configure show | awk '/^node/ {print $3}' > /tmp/all_nodes
-crm_node -l | awk '{print $2}' > /tmp/valid_nodes
-grep -F -x -v -f /tmp/valid_nodes /tmp/all_nodes | xargs -n1 crm configure delete
 exit 0

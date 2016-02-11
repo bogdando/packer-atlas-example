@@ -19,8 +19,7 @@
     "custom_script": ".",
     "disk_size": "5000",
     "mem_size": "512",
-    "vcpu_num": "1",
-    "cleanup": "false"
+    "vcpu_num": "1"
   },
   "builders": [{
     "vm_name": "ubuntu1404",
@@ -70,11 +69,8 @@
         "{{ user `vcpu_num`}}"
       ]
     ]
-  }, {
-    "type": "docker",
-    "image": "ubuntu:trusty",
-    "commit": true
-  }, {
+  },
+  {
     "vm_name": "ubuntu1404",
     "type": "virtualbox-iso",
     "http_directory": "http",
@@ -122,8 +118,7 @@
       "https_proxy={{user `https_proxy`}}",
       "ftp_proxy={{user `ftp_proxy`}}",
       "rsync_proxy={{user `rsync_proxy`}}",
-      "no_proxy={{user `no_proxy`}}",
-      "cleanup={{user `cleanup`}}"
+      "no_proxy={{user `no_proxy`}}"
     ],
     "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
     "scripts": [
@@ -141,12 +136,9 @@
   "post-processors": [
     [
       {
-        "type": "docker-tag",
-        "repository": "bogdando/rabbitmq-cluster-ocf",
-        "tag": "latest",
+        "type": "vagrant",
         "keep_input_artifact": false
       },
-      "docker-push",
       {
         "type": "atlas",
         "only": ["qemu"],

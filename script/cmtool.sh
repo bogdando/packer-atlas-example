@@ -84,7 +84,6 @@ install_puppet()
 
     # Install puppet-librarian
     echo "==> Installing Puppet-librarian ruby gem"
-    apt-get install -y make
     apt-get install -y ruby-dev
     gem install --force librarian-puppet --no-ri --no-rdoc
 }

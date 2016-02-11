@@ -20,23 +20,15 @@ Builds the Vagrant Box for Atlas for the rabbitmq clustering features testing.
 See the `rabbitmq-cluster-ocf.json` with the post-processors section with all details about
 deploying the Vagrant Box to Atlas.
 
-Also builds the docker image, though it must be pushed manually (TODO circle CI
-job auth for the dockerhub).
-
 ## Vagrantfile
 
-Supports libvirt, virtualbox, docker providers.
+Supports libvirt and virtualbox providers.
 Spins up two VM nodes [n1, n2] with predefined IP addressess 10.10.10.2-3/24.
 Creates a corosync cluster with disabled quorum and STONITH.
 Launches a rabbitmq OCF multi-state pacemaker clone which should assemble
 the rabbit cluster automatically.
 
-*Note*, for the docker provider it uses a /24 subnet constructed from the
-default docker bridge network, which is like "172.17.0.0/16".
-As networking is [not implemented](https://github.com/mitchellh/vagrant/issues/6667)
-for the docker provider, that is a workaround.
-
-*Note*, the vagrant may through en error about a bad ssh exit code. Just ignore it
+Note, the vagrant may through en error about a bad ssh exit code. Just ignore it
 and perform the manual action up for the rest of the nodes (n2, n3, etc.), if required.
 
 ## Acknowledgements

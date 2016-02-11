@@ -1,6 +1,8 @@
 #!/bin/bash -eux
 
 PACKAGES="
+iptables
+psmisc
 crmsh
 pacemaker
 corosync

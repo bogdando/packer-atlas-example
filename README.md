@@ -60,6 +60,21 @@ environment variables.
   `packer-atlas-example0` or `vagrant-libvirt` or the like. Otherwise nodes may
   become isolated from the host system.
 
+## Troubleshooting
+
+You may want to use the command like:
+```
+VAGRANT_LOG=info SLAVES_COUNT=2 vagrant up --provider docker 2>&1| tee out
+```
+
+There was added "Crafted:", "Executing:" log entries for the
+provision shell scripts.
+
+For the Rabbitmq OCF RA you may use the command like:
+```
+OCF_ROOT=/usr/lib/ocf /usr/lib/ocf/resource.d/rabbitmq/rabbitmq-server-ha monitor
+```
+
 ## Acknowledgements
 
 The Packer template and provision scripts are based on box-cutter/ubuntu-vm.

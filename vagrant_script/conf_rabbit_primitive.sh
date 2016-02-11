@@ -2,6 +2,17 @@
 # Configures the rabbitmq OCF primitive
 # Removes artificial nodes from the CIB.
 
+# Remove artificial nodes from CIB
+# wait for crm_node to become functioning
+count=0
+while [ $count -lt 160 ]
+do
+  crm_node -l
+  [ $? -eq 0 ] && break 
+  service pacemaker restart
+  sleep 5
+done
+crm_node -l | awk '{print $2}' > /tmp/valid_nodes
 # wait for the crmd to become ready
 count=0
 while [ $count -lt 160 ]
@@ -13,11 +24,10 @@ do
   count=$((count+10))
   sleep 10
 done
-
-# Remove artificial nodes from CIB
 crm configure show | awk '/^node/ {print $3}' > /tmp/all_nodes
-crm_node -l | awk '{print $2}' > /tmp/valid_nodes
-grep -F -x -v -f /tmp/valid_nodes /tmp/all_nodes | xargs -n1 crm configure delete
+for i in `grep -F -x -v -f /tmp/valid_nodes /tmp/all_nodes` ; do
+  crm --force configure delete $i
+done
 
 # create the rabbitmq multi-state primitive, remove old node's names artifact
 crm configure<<EOF

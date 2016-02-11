@@ -11,4 +11,6 @@ while (( "$#" )); do
   echo "${1}" >> /etc/hosts
   shift
 done
+# This is for docker containers
+rsyslogd >/dev/null 2>&1 || /bin/true
 exit 0

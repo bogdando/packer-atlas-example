@@ -1,10 +1,13 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require "log4r"
 
 SLAVES_COUNT=(ENV['SLAVES_COUNT'] || '1').to_i
 IMAGE_NAME=ENV['IMAGE_NAME'] || "bogdando/rabbitmq-cluster-ocf"
 IP24NET=ENV['IP24NET'] || "10.10.10"
 DOCKER_NET=ENV['DOCKER_NET'] || "rabbits"
+
+@logger = Log4r::Logger.new("vagrant::docker::driver")
 
 # FIXME(bogdando) more natively to distinguish a provider specific logic
 provider = (ARGV[2] || ENV['VAGRANT_DEFAULT_PROVIDER'] || :docker).to_sym
@@ -18,13 +21,15 @@ provider = (ARGV[2] || ENV['VAGRANT_DEFAULT_PROVIDER'] || :docker).to_sym
 end
 
 def shell_script(filename, args=[])
-  "/bin/bash #{filename} #{args.join ' '} 2>/dev/null"
+  shell_script_crafted = "/bin/bash #{filename} #{args.join ' '} 2>/dev/null"
+  @logger.info("Crafted shell-script: #{shell_script_crafted})")
+  shell_script_crafted
 end
 
 # W/a unimplemented docker-exec, see https://github.com/mitchellh/vagrant/issues/4179
 # Use docker exec instead of the SSH provisioners
 def docker_exec (name, script)
-  puts "exec at #{name}: #{script}"
+  @logger.info("Executing docker-exec at #{name}: #{script}")
   system "docker exec -it #{name} #{script}"
 end
 
@@ -93,9 +98,9 @@ Vagrant.configure(2) do |config|
         d.create_args = ["-i", "-t", "--privileged", "--ip=#{IP24NET}.2", "--net=#{DOCKER_NET}"]
       end
       config.trigger.after :up do
-        docker_exec("n1","#{hosts_setup}")
+        docker_exec("n1","#{hosts_setup} >/dev/null 2>&1")
         docker_exec("n1","#{corosync_setup}")
-        docker_exec("n1","#{rabbit_ocf_setup}")
+        docker_exec("n1","#{rabbit_ocf_setup} >/dev/null 2>&1")
         docker_exec("n1","#{rabbit_primitive_setup}")
       end
     else
@@ -121,9 +126,9 @@ Vagrant.configure(2) do |config|
           d.create_args = ["-i", "-t", "--privileged", "--ip=#{IP24NET}.#{ip_ind}", "--net=#{DOCKER_NET}"]
         end
         config.trigger.after :up do
-          docker_exec("n#{index}","#{hosts_setup}")
+          docker_exec("n#{index}","#{hosts_setup} >/dev/null 2>&1")
           docker_exec("n#{index}","#{corosync_setup}")
-          docker_exec("n#{index}","#{rabbit_ocf_setup}")
+          docker_exec("n#{index}","#{rabbit_ocf_setup} >/dev/null 2>&1")
         end
       else
         config.vm.network :private_network, ip: "#{IP24NET}.#{ip_ind}", :mode => 'nat'

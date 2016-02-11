@@ -14,7 +14,7 @@ dependencies:
       sudo mkdir /opt/packer &&
       pushd /opt/packer &&
       echo "Downloading packer ${PACKER_VERSION}..." &&
-      sudo wget --no-verbose https://dl.bintray.com/mitchellh/packer/packer_${PACKER_VERSION}_linux_amd64.zip &&
+      sudo wget --no-verbose https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip &&
       echo "Installing packer ${PACKER_VERSION}..." &&
       sudo unzip packer_${PACKER_VERSION}_linux_amd64.zip &&
       sudo rm packer_${PACKER_VERSION}_linux_amd64.zip &&
@@ -29,5 +29,5 @@ deployment:
   publish:
     branch: master
     commands:
-      - if [ "${PUSH}" = "true" ] ; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS fi
-      - if [ "${PUSH}" = "true" ] ; then packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json fi
+      - if [ "${PUSH}" = "true" ] ; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS ; fi
+      - if [ "${PUSH}" = "true" ] ; then packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json ; fi

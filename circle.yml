@@ -5,7 +5,7 @@ machine:
 
   environment:
     PACKER_VERSION: 0.8.1
-    PUSH: false
+    PUSH: true
 
 dependencies:
   pre:
@@ -29,5 +29,6 @@ deployment:
   publish:
     branch: master
     commands:
-      - if [ "${PUSH}" = "true" ] ; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS ; fi
-      - if [ "${PUSH}" = "true" ] ; then packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json ; fi
+      - if [ "${PUSH}" != "false" ] ; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS ; fi
+      - if [ "${PUSH}" = "trusty" -o "${PUSH}" = "true" ]; then packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json; fi
+      - if [ "${PUSH}" = "wily" -o "${PUSH}" = "true" ]; then packer push -name=bogdando/rabbitmq-cluster-ocf-wily rabbitmq-cluster-ocf-wily.json; fi

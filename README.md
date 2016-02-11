@@ -1,10 +1,11 @@
 # RabbitMQ cluster OCF packer template
 
 [![Circle CI](https://circleci.com/gh/bogdando/packer-atlas-example.svg?style=svg)](https://circleci.com/gh/bogdando/packer-atlas-example)
-| [Atlas Builds](https://atlas.hashicorp.com/bogdando/build-configurations/rabbitmq-cluster-ocf)
-| [Atlas Vagrant Boxes](https://atlas.hashicorp.com/bogdando/boxes/rabbitmq-cluster-ocf)
-| [DockerHub Image](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf/)
 | [RabbitMQ Pacemaker OCF RA Docs](http://www.rabbitmq.com/pacemaker.html)
+| [Atlas Vagrant Boxes (Ubuntu 14.04)](https://atlas.hashicorp.com/bogdando/boxes/rabbitmq-cluster-ocf)
+| [Docker Image (Ubuntu 14.04)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf/)
+| [Docker Image (Ubuntu 15.10)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-wily/) 
+| [Atlas Builds](https://atlas.hashicorp.com/bogdando/build-configurations/rabbitmq-cluster-ocf)
 
 This is a RabbitMQ clustered node template to build a Vagrant Box and
 a Docker Image with Packer and push it to Atlas/DockerHub.
@@ -15,7 +16,8 @@ CircleCI that triggers a packer build and pushes with `packer push` both
 to Atlas and DockerHub.
 
 Note, to disable or enable pushing, set the `PUSH` param in the ``circle.yaml``
-to `false` or `true`.
+to `false` or `true`. To push only builds for Ubuntu 14.04 or 15.10. set it
+to the `trusty` or `wily` as well.
 
 ## CircleCI template
 See the `circle.yml` for details how the glue works. It just installs packer
@@ -42,6 +44,10 @@ environment variables.
 
 ## Known issues
 
+* When using the ``IMAGE_NAME=bogdando/rabbitmq-cluster-ocf-wily`` containers
+  based on Ubuntu Wily 15.10, ssh is not running. Add another environment var:
+  ``DOCKER_CMD="/sbin/init"`` or suchlike.
+
 * For the docker provider, a networking is [not implemented](https://github.com/mitchellh/vagrant/issues/6667)
   and there is no [docker-exec privisioner](https://github.com/mitchellh/vagrant/issues/4179)
   to replace the SSH-based one. So I put ugly workarounds all around to make
@@ -49,8 +55,10 @@ environment variables.
 
 * Use ``docker rm -f -v`` if ``vagrant destroy`` fails to teardown things.
 
-* Use ``docker exec -it n1 bash`` if ``vagrant ssh n1`` fails. The same for
-  the rest of the slave nodes.
+* if ``vagrant ssh n1`` fails, use the command
+  ```
+  docker exec -it n1 bash``
+  ```
 
 * The ``vagrant up`` may through en error about a bad ssh exit code. Just
   ignore it and perform the manual action up for the rest of the nodes

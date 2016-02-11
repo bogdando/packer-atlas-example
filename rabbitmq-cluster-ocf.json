@@ -146,6 +146,7 @@
         "tag": "latest",
         "keep_input_artifact": false
       },
+      "docker-push",
       {
         "type": "atlas",
         "only": ["qemu"],

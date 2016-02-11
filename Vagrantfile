@@ -6,6 +6,7 @@ SLAVES_COUNT=(ENV['SLAVES_COUNT'] || '1').to_i
 IMAGE_NAME=ENV['IMAGE_NAME'] || "bogdando/rabbitmq-cluster-ocf"
 IP24NET=ENV['IP24NET'] || "10.10.10"
 DOCKER_NET=ENV['DOCKER_NET'] || "rabbits"
+DOCKER_CMD=ENV['DOCKER_CMD'] || "/usr/sbin/sshd -D"
 
 @logger = Log4r::Logger.new("vagrant::docker::driver")
 
@@ -83,7 +84,7 @@ Vagrant.configure(2) do |config|
       d.image = IMAGE_NAME
       d.remains_running = false
       d.has_ssh = false
-      d.cmd = ["/usr/sbin/sshd", "-D"]
+      d.cmd = DOCKER_CMD.split(' ')
     end
   else
     config.vm.box = IMAGE_NAME

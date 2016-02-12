@@ -41,14 +41,17 @@ rabbit_primitive_setup = shell_script("/vagrant/vagrant_script/conf_rabbit_primi
 # and got to the UCA packages
 rabbit_ocf_setup = shell_script("/vagrant/vagrant_script/conf_rabbit_ocf.sh")
 
-# Render hosts entries
+# Render hosts entries and rabbit node names for the smoke test
 entries = "\"#{IP24NET}.2 n1 n1\""
+rabbit_nodes=["rabbit@n1"]
 SLAVES_COUNT.times do |i|
   index = i + 2
   ip_ind = i + 3
   raise if ip_ind > 254
   entries += " \"#{IP24NET}.#{ip_ind} n#{index} n#{index}\""
+  rabbit_nodes << "rabbit@n#{index}"
 end
+rabbit_test = shell_script("/vagrant/vagrant_script/test_rabbitcluster.sh", rabbit_nodes)
 hosts_setup = shell_script("/vagrant/vagrant_script/conf_hosts.sh", [entries])
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
@@ -59,10 +62,10 @@ Vagrant.configure(2) do |config|
   if provider == :docker
     # W/a unimplemented docker networking, see
     # https://github.com/mitchellh/vagrant/issues/6667.
-    # Create or delete the DOCKER_NET (depends on the vagrant action)
+    # Create or delete the rabbits net (depends on the vagrant action)
     config.trigger.before :up do
       system <<-SCRIPT
-      if ! docker network inspect #{DOCKER_NET} >/dev/null 2>&1 ; then
+      if ! docker network inspect rabbits >/dev/null 2>&1 ; then
         docker network create -d bridge \
           -o "com.docker.network.bridge.enable_icc"="true" \
           -o "com.docker.network.bridge.enable_ip_masquerade"="true" \
@@ -96,13 +99,13 @@ Vagrant.configure(2) do |config|
     if provider == :docker
       config.vm.provider :docker do |d, override|
         d.name = "n1"
-        d.create_args = ["-i", "-t", "--privileged", "--ip=#{IP24NET}.2", "--net=#{DOCKER_NET}"]
+        d.create_args = ["-i", "-t", "--privileged", "--ip=#{IP24NET}.2", "--net=rabbits"]
       end
       config.trigger.after :up do
         docker_exec("n1","#{hosts_setup} >/dev/null 2>&1")
-        docker_exec("n1","#{corosync_setup}")
+        docker_exec("n1","#{corosync_setup} >/dev/null 2>&1")
         docker_exec("n1","#{rabbit_ocf_setup} >/dev/null 2>&1")
-        docker_exec("n1","#{rabbit_primitive_setup}")
+        docker_exec("n1","#{rabbit_primitive_setup} >/dev/null 2>&1")
       end
     else
       config.vm.network :private_network, ip: "#{IP24NET}.2", :mode => 'nat'
@@ -124,11 +127,11 @@ Vagrant.configure(2) do |config|
       if provider == :docker
         config.vm.provider :docker do |d, override|
           d.name = "n#{index}"
-          d.create_args = ["-i", "-t", "--privileged", "--ip=#{IP24NET}.#{ip_ind}", "--net=#{DOCKER_NET}"]
+          d.create_args = ["-i", "-t", "--privileged", "--ip=#{IP24NET}.#{ip_ind}", "--net=rabbits"]
         end
         config.trigger.after :up do
           docker_exec("n#{index}","#{hosts_setup} >/dev/null 2>&1")
-          docker_exec("n#{index}","#{corosync_setup}")
+          docker_exec("n#{index}","#{corosync_setup} >/dev/null 2>&1")
           docker_exec("n#{index}","#{rabbit_ocf_setup} >/dev/null 2>&1")
         end
       else
@@ -138,5 +141,9 @@ Vagrant.configure(2) do |config|
         config.vm.provision "shell", run: "always", inline: rabbit_ocf_setup, privileged: true
       end
     end
+  end
+
+  config.trigger.after :up do
+    puts "For smoke test, login to one of the nodes and use the command: sudo #{rabbit_test}"
   end
 end

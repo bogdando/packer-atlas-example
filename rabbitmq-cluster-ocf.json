@@ -5,7 +5,7 @@
     "cm_version": "",
     "cleanup_pause": "",
     "headless": "",
-    "update": "false",
+    "update": "true",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
     "install_vagrant_key": "true",

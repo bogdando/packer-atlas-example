@@ -4,7 +4,7 @@ machine:
     - docker
 
   environment:
-    PACKER_VERSION: 0.8.1
+    PACKER_VERSION: 0.8.6
     PUSH: false
 
 dependencies:
@@ -16,7 +16,7 @@ dependencies:
       echo "Downloading packer ${PACKER_VERSION}..." &&
       sudo wget --no-verbose https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip &&
       echo "Installing packer ${PACKER_VERSION}..." &&
-      sudo unzip packer_${PACKER_VERSION}_linux_amd64.zip &&
+      sudo unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /opt/packer &&
       sudo rm packer_${PACKER_VERSION}_linux_amd64.zip &&
       pushd /usr/bin &&
       sudo ln -s /opt/packer/* .
@@ -29,8 +29,11 @@ deployment:
   publish:
     branch: master
     commands:
-      - if echo "${PUSH}" | egrep -q "trusty|true|atlas" ; then \
-        packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json; fi
-      - if echo "${PUSH}" | egrep -q "wily|true|docker" ; then \
-        docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS ; \
-        packer push -name=bogdando/rabbitmq-cluster-ocf-wily rabbitmq-cluster-ocf-wily.json; fi
+      - >
+        if echo "${PUSH}" | egrep -q "trusty|true|atlas" ;
+        then packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json;
+        fi ;
+        if echo "${PUSH}" | egrep -q "wily|true|docker" ;
+        then echo NOT IMPLEMENTED, SORRY! ;
+        echo docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS ; 
+        echo packer build -only=docker rabbitmq-cluster-ocf-docker-wily.json ; fi

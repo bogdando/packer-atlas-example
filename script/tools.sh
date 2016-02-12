@@ -2,9 +2,15 @@
 
 PACKAGES="
 rsyslog
+psmisc
+iputils-ping
+iptables
 less
 wget
+elvis-tiny
+screen
+tcpdump
+strace
 "
-# Install corosync with pacemaker
 apt-get -y install $PACKAGES
 exit 0

@@ -15,20 +15,26 @@ The automated build is triggered by a WebHook in GitHub to start a build in
 CircleCI that triggers a packer build and pushes with `packer push` both
 to Atlas and DockerHub.
 
-Note, to disable or enable pushing, set the `PUSH` param in the ``circle.yaml``
-to `false` or `true`. To push only builds for Ubuntu 14.04 or 15.10. set it
-to the `trusty` or `wily` as well.
+*Note*
+* To disable or enable `push all`, set the `PUSH` param in the ``circle.yaml``
+  to `false` or `true`.
+* To push only atlas builds for Ubuntu 14.04, set it to `trusty` or `atlas`.
+* And to push only docker builds for Ubuntu 15.10, use `wily` or `docker`.
 
 ## CircleCI template
-See the `circle.yml` for details how the glue works. It just installs packer
-0.8.1, enables docker service, and starts the `packer push`.
 
-## RabbitMQ cluster OCF packer template
+See the `circle.yml` for details how the glue works. It just installs packer
+0.8.1, enables docker service, and starts the `packer push`, if pushing is
+enabled.
+
+## RabbitMQ cluster OCF packer templates
 
 Builds the Vagrant Box for Atlas for the rabbitmq clustering features testing.
 See the ``rabbitmq-cluster-ocf.json`` with the post-processors section with all
-details about deploying. Also builds the Docker Image and pushes to the
-DockerHub.
+details about deploying.
+
+The ``rabbitmq-cluster-ocf-wily.json`` also builds the Docker Image based on
+Ubuntu 15.10 Wily.
 
 ## Vagrantfile
 
@@ -40,13 +46,15 @@ Supports libvirt, virtualbox, docker providers.
   the rabbit cluster automatically.
 
 Note, that constants from the ``Vagrantfile`` may be as well configred as
-environment variables.
+environment variables. Also note, that for the docker wily image, ssh server is
+not installed.
 
 ## Known issues
 
-* When using the ``IMAGE_NAME=bogdando/rabbitmq-cluster-ocf-wily`` containers
-  based on Ubuntu Wily 15.10, ssh is not running. Add another environment var:
-  ``DOCKER_CMD="/sbin/init"`` or suchlike.
+* For the docker provider, use the image based on Ubuntu 15.10. It has
+  Pacemaker 1.1.12, while the image with Ubuntu 14.10 contains Pacemaker 1.1.10
+  and there is stability issue which renders the pacemakerd daemon stopping
+  sporadically, therefore the RabbitMQ cluster does not assemble well.
 
 * For the docker provider, a networking is [not implemented](https://github.com/mitchellh/vagrant/issues/6667)
   and there is no [docker-exec privisioner](https://github.com/mitchellh/vagrant/issues/4179)

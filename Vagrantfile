@@ -3,10 +3,10 @@
 require "log4r"
 
 SLAVES_COUNT=(ENV['SLAVES_COUNT'] || '1').to_i
-IMAGE_NAME=ENV['IMAGE_NAME'] || "bogdando/rabbitmq-cluster-ocf"
 IP24NET=ENV['IP24NET'] || "10.10.10"
-DOCKER_NET=ENV['DOCKER_NET'] || "rabbits"
-DOCKER_CMD=ENV['DOCKER_CMD'] || "/usr/sbin/sshd -D"
+IMAGE_NAME=ENV['IMAGE_NAME'] || "bogdando/rabbitmq-cluster-ocf"
+DOCKER_IMAGE=ENV['DOCKER_IMAGE'] || "bogdando/rabbitmq-cluster-ocf-wily"
+DOCKER_CMD=ENV['DOCKER_CMD'] || "/sbin/init"
 
 @logger = Log4r::Logger.new("vagrant::docker::driver")
 
@@ -70,18 +70,18 @@ Vagrant.configure(2) do |config|
           --gateway=#{IP24NET}.1 \
           --ip-range=#{IP24NET}.0/24 \
           --subnet=#{IP24NET}.0/24 \
-          #{DOCKER_NET} >/dev/null 2>&1
+          rabbits >/dev/null 2>&1
       fi
       SCRIPT
     end
     config.trigger.after :destroy do
       system <<-SCRIPT
-      docker network rm #{DOCKER_NET} >/dev/null 2>&1
+      docker network rm rabbits >/dev/null 2>&1
       SCRIPT
     end
 
     config.vm.provider :docker do |d, override|
-      d.image = IMAGE_NAME
+      d.image = DOCKER_IMAGE
       d.remains_running = false
       d.has_ssh = false
       d.cmd = DOCKER_CMD.split(' ')

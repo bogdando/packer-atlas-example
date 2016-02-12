@@ -52,9 +52,11 @@
     "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
     "scripts": [
       "script/update.sh",
+      "script/tools.sh",
       "script/vagrant.sh",
       "script/cmtool.sh",                                                                                                                             
       "script/ha_stack.sh",
+      "script/crmsh.sh",
       "script/rabbitmq.sh",
       "script/minimize.sh",
       "script/cleanup.sh"

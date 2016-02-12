@@ -20,7 +20,7 @@
     "disk_size": "5000",
     "mem_size": "512",
     "vcpu_num": "1",
-    "cleanup": "false"
+    "cleanup": "true"
   },
   "builders": [{
     "vm_name": "ubuntu1404",
@@ -70,11 +70,8 @@
         "{{ user `vcpu_num`}}"
       ]
     ]
-  }, {
-    "type": "docker",
-    "image": "ubuntu:trusty",
-    "commit": true
-  }, {
+  },
+  {
     "vm_name": "ubuntu1404",
     "type": "virtualbox-iso",
     "http_directory": "http",
@@ -141,12 +138,9 @@
   "post-processors": [
     [
       {
-        "type": "docker-tag",
-        "repository": "bogdando/rabbitmq-cluster-ocf",
-        "tag": "latest",
+        "type": "vagrant",
         "keep_input_artifact": false
       },
-      "docker-push",
       {
         "type": "atlas",
         "only": ["qemu"],

@@ -39,61 +39,7 @@ TODO(bogdando) add xenial docker builds as well.
 
 ## Vagrantfile
 
-Supports libvirt, virtualbox, docker (experimental) providers.
-Required vagrant plugins: vagrant-triggers, vagrant-libvirt.
-
-* Spins up two VM nodes ``[n1, n2]`` with predefined IP addressess
-  ``10.10.10.2-3/24`` by default. Use the ``SLAVES_COUNT`` env var, if you need
-  more nodes to form a cluster. Note, that the ``vagrant destroy`` shall accept
-  the same number as well!
-* Creates a corosync cluster with disabled quorum and STONITH.
-* Launches a rabbitmq OCF multi-state pacemaker clone which should assemble
-  the rabbit cluster automatically.
-* Generates a command for a smoke test for the rabbit cluster. This may be
-  run on one of the nodes (n1, n2, etc.). If the cluster assembles within couple
-  of minutes, it puts `RabbitMQ cluster smoke test: PASSED`.
-
-Note, that constants from the ``Vagrantfile`` may be as well configred as
-environment variables. Also note, that for the docker wily image, ssh server is
-not installed and the command ``vagrant ssh`` is not working. Instead use the
-``docker exec -it n1 bash`` or suchlike.
-
-## Known issues
-
-* For the docker provider, use the image based on Ubuntu 15.10. It has
-  Pacemaker 1.1.12, while the image with Ubuntu 14.10 contains Pacemaker 1.1.10
-  and there is a stability issue which renders the pacemakerd daemon stopping
-  sporadically, therefore the RabbitMQ cluster does not assemble well.
-
-* For the docker provider, a networking is [not implemented](https://github.com/mitchellh/vagrant/issues/6667)
-  and there is no [docker-exec privisioner](https://github.com/mitchellh/vagrant/issues/4179)
-  to replace the ssh-based one. So I put ugly workarounds all around to make
-  things working more or less.
-
-* Use ``docker rm -f -v`` if ``vagrant destroy`` fails to teardown things.
-  Note, that this will likely make your docker images directory eating more
-  and more free space for each run/destroy.
-
-* Make sure there is no conflicting host networks exist, like
-  ``packer-atlas-example0`` or ``vagrant-libvirt`` or the like. Otherwise nodes may
-  become isolated from the host system.
-
-## Troubleshooting
-
-You may want to use the command like:
-```
-VAGRANT_LOG=info SLAVES_COUNT=2 vagrant up --provider docker 2>&1| tee out
-```
-
-There was added "Crafted:", "Executing:" log entries for the
-provision shell scripts.
-
-For the Rabbitmq OCF RA you may use the command like:
-```
-OCF_ROOT=/usr/lib/ocf /usr/lib/ocf/resource.d/rabbitmq/rabbitmq-server-ha monitor
-```
-
-It puts its logs under ``/var/log/syslog`` from the `lrmd` program tag.
+Moved to the https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant
 
 ## Acknowledgements
 

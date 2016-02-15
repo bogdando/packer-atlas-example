@@ -28,6 +28,7 @@ do
     break
   fi
   echo "RabbitMQ cluster is yet to be ready"
+  count=$((count+10))
   sleep 10
 done
 

@@ -14,9 +14,7 @@ See more details in [Stefan Scherer's blog post](https://stefanscherer.github.io
 The automated build is triggered by a WebHook in GitHub to start a build in
 CircleCI that triggers a packer build and pushes with `packer push` both
 to Atlas and DockerHub.
-
-FIXME(bogdando) pushing is working only manually at the moment. CI job seems
-broken ;(
+FIXME(bogdando) pushing is working only to atlas at the moment.
 
 * To disable or enable `push all`, set the `PUSH` param in the ``circle.yaml``
   to `false` or `true`.
@@ -35,31 +33,36 @@ Builds the Vagrant Box for Atlas for the rabbitmq clustering features testing.
 See the ``rabbitmq-cluster-ocf.json`` with the post-processors section with all
 details about deploying.
 
-The ``rabbitmq-cluster-ocf-docker-wily.json`` also builds the Docker Image based on
-Ubuntu 15.10 Wily.
+The ``rabbitmq-cluster-ocf-docker-wily.json`` also builds the Docker Image based
+on Ubuntu 15.10 Wily.
+TODO(bogdando) add xenial docker builds as well.
 
 ## Vagrantfile
 
-Supports libvirt, virtualbox, docker providers.
-Reguired plugins: vagrant-triggers, vagrant-libvirt.
+Supports libvirt, virtualbox, docker (experimental) providers.
+Required vagrant plugins: vagrant-triggers, vagrant-libvirt.
 
 * Spins up two VM nodes ``[n1, n2]`` with predefined IP addressess
-  ``10.10.10.2-3/24`` by default.
+  ``10.10.10.2-3/24`` by default. Use the ``SLAVES_COUNT`` env var, if you need
+  more nodes to form a cluster. Note, that the ``vagrant destroy`` shall accept
+  the same number as well!
 * Creates a corosync cluster with disabled quorum and STONITH.
 * Launches a rabbitmq OCF multi-state pacemaker clone which should assemble
   the rabbit cluster automatically.
-* Generates a command for a smoke test for the rabbit cluster. This shall be
-  run on one of the nodes (n1, n2, etc.) running.
+* Generates a command for a smoke test for the rabbit cluster. This may be
+  run on one of the nodes (n1, n2, etc.). If the cluster assembles within couple
+  of minutes, it puts `RabbitMQ cluster smoke test: PASSED`.
 
 Note, that constants from the ``Vagrantfile`` may be as well configred as
 environment variables. Also note, that for the docker wily image, ssh server is
-not installed.
+not installed and the command ``vagrant ssh`` is not working. Instead use the
+``docker exec -it n1 bash`` or suchlike.
 
 ## Known issues
 
 * For the docker provider, use the image based on Ubuntu 15.10. It has
   Pacemaker 1.1.12, while the image with Ubuntu 14.10 contains Pacemaker 1.1.10
-  and there is stability issue which renders the pacemakerd daemon stopping
+  and there is a stability issue which renders the pacemakerd daemon stopping
   sporadically, therefore the RabbitMQ cluster does not assemble well.
 
 * For the docker provider, a networking is [not implemented](https://github.com/mitchellh/vagrant/issues/6667)
@@ -68,15 +71,8 @@ not installed.
   things working more or less.
 
 * Use ``docker rm -f -v`` if ``vagrant destroy`` fails to teardown things.
-
-* if ``vagrant ssh n1`` fails, use the command
-  ```
-  docker exec -it n1 bash
-  ```
-
-* The ``vagrant up`` may through en error about a bad ssh exit code. Just
-  ignore it and perform the manual action up for the rest of the nodes
-  (n2, n3, etc.), if required.
+  Note, that this will likely make your docker images directory eating more
+  and more free space for each run/destroy.
 
 * Make sure there is no conflicting host networks exist, like
   ``packer-atlas-example0`` or ``vagrant-libvirt`` or the like. Otherwise nodes may
@@ -96,6 +92,8 @@ For the Rabbitmq OCF RA you may use the command like:
 ```
 OCF_ROOT=/usr/lib/ocf /usr/lib/ocf/resource.d/rabbitmq/rabbitmq-server-ha monitor
 ```
+
+It puts its logs under ``/var/log/syslog`` from the `lrmd` program tag.
 
 ## Acknowledgements
 

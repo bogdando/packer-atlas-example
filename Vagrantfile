@@ -28,7 +28,7 @@ end
 
 # Render a rabbitmq pacemaker primitive configuration
 rabbit_primitive_setup = shell_script("/vagrant/vagrant_script/conf_rabbit_primitive.sh")
-cib_cleanup = shell_script("/vagrant/vagrant_script/conf_cib_cleanup")
+cib_cleanup = shell_script("/vagrant/vagrant_script/conf_cib_cleanup.sh")
 
 # FIXME(bogdando) remove rendering rabbitmq OCF script setup after v3.5.7 released
 # and got to the UCA packages
@@ -99,6 +99,7 @@ Vagrant.configure(2) do |config|
         docker_exec("n1","#{corosync_setup} >/dev/null 2>&1")
         docker_exec("n1","#{rabbit_ocf_setup} >/dev/null 2>&1")
         docker_exec("n1","#{rabbit_primitive_setup} >/dev/null 2>&1")
+        docker_exec("n1","#{cib_cleanup} >/dev/null 2>&1")
       end
     else
       config.vm.network :private_network, ip: "#{IP24NET}.2", :mode => 'nat'
@@ -127,6 +128,7 @@ Vagrant.configure(2) do |config|
           docker_exec("n#{index}","#{hosts_setup} >/dev/null 2>&1")
           docker_exec("n#{index}","#{corosync_setup} >/dev/null 2>&1")
           docker_exec("n#{index}","#{rabbit_ocf_setup} >/dev/null 2>&1")
+          docker_exec("n#{index}","#{cib_cleanup} >/dev/null 2>&1")
         end
       else
         config.vm.network :private_network, ip: "#{IP24NET}.#{ip_ind}", :mode => 'nat'

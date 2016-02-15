@@ -12,14 +12,6 @@ DOCKER_CMD=ENV['DOCKER_CMD'] || "/sbin/init"
 
 # FIXME(bogdando) more natively to distinguish a provider specific logic
 provider = (ARGV[2] || ENV['VAGRANT_DEFAULT_PROVIDER'] || :docker).to_sym
-# Install required plugins
-%w(vagrant-libvirt vagrant-triggers).each do |p|
-  system <<-SCRIPT
-  if ! vagrant plugin list | grep -q "#{p}" ; then
-    vagrant plugin install "#{p}"
-  fi
-  SCRIPT
-end
 
 def shell_script(filename, args=[])
   shell_script_crafted = "/bin/bash #{filename} #{args.join ' '} 2>/dev/null"

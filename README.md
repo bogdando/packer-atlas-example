@@ -41,6 +41,7 @@ Ubuntu 15.10 Wily.
 ## Vagrantfile
 
 Supports libvirt, virtualbox, docker providers.
+Reguired plugins: vagrant-triggers, vagrant-libvirt.
 
 * Spins up two VM nodes ``[n1, n2]`` with predefined IP addressess
   ``10.10.10.2-3/24`` by default.

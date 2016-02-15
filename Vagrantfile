@@ -28,6 +28,7 @@ end
 
 # Render a rabbitmq pacemaker primitive configuration
 rabbit_primitive_setup = shell_script("/vagrant/vagrant_script/conf_rabbit_primitive.sh")
+cib_cleanup = shell_script("/vagrant/vagrant_script/conf_cib_cleanup")
 
 # FIXME(bogdando) remove rendering rabbitmq OCF script setup after v3.5.7 released
 # and got to the UCA packages
@@ -105,6 +106,7 @@ Vagrant.configure(2) do |config|
       config.vm.provision "shell", run: "always", inline: corosync_setup, privileged: true
       config.vm.provision "shell", run: "always", inline: rabbit_ocf_setup, privileged: true
       config.vm.provision "shell", run: "always", inline: rabbit_primitive_setup, privileged: true
+      config.vm.provision "shell", run: "always", inline: cib_cleanup, privileged: true
     end
   end
 
@@ -131,6 +133,7 @@ Vagrant.configure(2) do |config|
         config.vm.provision "shell", run: "always", inline: hosts_setup, privileged: true
         config.vm.provision "shell", run: "always", inline: corosync_setup, privileged: true
         config.vm.provision "shell", run: "always", inline: rabbit_ocf_setup, privileged: true
+        config.vm.provision "shell", run: "always", inline: cib_cleanup, privileged: true
       end
     end
   end

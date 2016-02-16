@@ -4,7 +4,7 @@
     "cm": "puppet",
     "cm_version": "",
     "cleanup_pause": "",
-    "headless": "",
+    "headless": "{{env `headless`}}",
     "update": "true",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
@@ -30,7 +30,7 @@
   "provisioners": [{
     "type": "shell",
     "execute_command": "echo 'vagrant' | sh '{{.Path}}'",
-    "scripts": [                                                                                                                               
+    "scripts": [
       "script/sudo.sh"
     ]}, {
     "type": "shell",
@@ -54,7 +54,7 @@
       "script/update.sh",
       "script/tools.sh",
       "script/vagrant.sh",
-      "script/cmtool.sh",                                                                                                                             
+      "script/cmtool.sh",
       "script/ha_stack.sh",
       "script/crmsh.sh",
       "script/rabbitmq.sh",

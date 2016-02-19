@@ -1,13 +1,16 @@
-#!/bin/bash -eux                                                                                                                                      
+#!/bin/bash -eux
 
 PACKAGES="
+make
+curl
+git
 rsyslog
 psmisc
 iputils-ping
 iptables
 less
 wget
-elvis-tiny
+vim
 screen
 tcpdump
 strace

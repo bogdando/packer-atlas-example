@@ -24,7 +24,7 @@
   },
   "builders": [{
     "type": "docker",
-    "image": "ubuntu:wily",
+    "image": "ubuntu:trusty",
     "commit": true,
     "run_command": [
       "-ti",
@@ -69,7 +69,6 @@
       "script/cmtool.sh",
       "script/docker.sh",
       "script/ha_stack.sh",
-      "script/crmsh.sh",
       "script/rabbitmq.sh",
       "script/minimize.sh",
       "script/cleanup.sh"
@@ -79,7 +78,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "bogdando/rabbitmq-cluster-ocf-wily",
+        "repository": "bogdando/rabbitmq-cluster-ocf",
         "tag": "latest",
         "keep_input_artifact": false
       },

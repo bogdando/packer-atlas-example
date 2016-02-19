@@ -54,6 +54,7 @@
       "script/update.sh",
       "script/tools.sh",
       "script/vagrant.sh",
+      "script/sshd.sh",
       "script/cmtool.sh",
       "script/ha_stack.sh",
       "script/crmsh.sh",

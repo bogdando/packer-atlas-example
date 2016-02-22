@@ -4,7 +4,8 @@
 | [RabbitMQ Pacemaker OCF RA Docs](http://www.rabbitmq.com/pacemaker.html)
 | [Atlas Vagrant Boxes (Ubuntu 14.04)](https://atlas.hashicorp.com/bogdando/boxes/rabbitmq-cluster-ocf)
 | [Docker Image (Ubuntu 14.04)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf/)
-| [Docker Image (Ubuntu 15.10)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-wily/) 
+| [Docker Image (Ubuntu 15.10)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-wily/)
+| [Docker Image (Ubuntu 16.04)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-xenial/)
 | [Atlas Builds](https://atlas.hashicorp.com/bogdando/build-configurations/rabbitmq-cluster-ocf)
 
 This is a RabbitMQ clustered node template to build a Vagrant Box and
@@ -12,14 +13,12 @@ a Docker Image with Packer and push it to Atlas/DockerHub.
 See more details in [Stefan Scherer's blog post](https://stefanscherer.github.io/automate-building-vagrant-boxes-with-atlas/).
 
 The automated build is triggered by a WebHook in GitHub to start a build in
-CircleCI that triggers a packer build and pushes with `packer push` both
-to Atlas and DockerHub.
+CircleCI that triggers a packer build and pushes with `packer push` which
+builds an Atlas box.
 FIXME(bogdando) pushing is working only to atlas at the moment.
 
 * To disable or enable `push all`, set the `PUSH` param in the ``circle.yaml``
   to `false` or `true`.
-* To push only atlas builds for Ubuntu 14.04, set it to `trusty` or `atlas`.
-* And to push only docker builds for Ubuntu 15.10, use `wily` or `docker`.
 
 ## CircleCI template
 
@@ -34,12 +33,14 @@ See the ``rabbitmq-cluster-ocf.json`` with the post-processors section with all
 details about deploying.
 
 The ``rabbitmq-cluster-ocf-docker-wily.json`` also builds the Docker Image based
-on Ubuntu 15.10 Wily.
-TODO(bogdando) add xenial docker builds as well.
+on Ubuntu 15.10 Wily. The ``rabbitmq-cluster-ocf-docker-xenial.json`` builds
+the Docker Image based on Ubuntu 16.04 Xenial.
+
 
 ## Vagrantfile
 
-Moved to the https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant
+Moved to the https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant .
+It allows to bootstrap a cluster and perform a smoke test.
 
 ## Acknowledgements
 

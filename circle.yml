@@ -30,10 +30,6 @@ deployment:
     branch: master
     commands:
       - >
-        if echo "${PUSH}" | egrep -q "trusty|true|atlas" ;
+        if [ "${PUSH}" = "true" ] ;
         then packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json;
-        fi ;
-        if echo "${PUSH}" | egrep -q "wily|true|docker" ;
-        then echo NOT IMPLEMENTED, SORRY! ;
-        echo docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS ; 
-        echo packer build -only=docker rabbitmq-cluster-ocf-docker-wily.json ; fi
+        fi

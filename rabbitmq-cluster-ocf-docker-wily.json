@@ -69,7 +69,7 @@
       "script/cmtool.sh",
       "script/docker.sh",
       "script/ha_stack.sh",
-      "script/crmsh.sh",
+      "script/crmsh_wily.sh",
       "script/rabbitmq.sh",
       "script/minimize.sh",
       "script/cleanup.sh"

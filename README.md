@@ -3,7 +3,6 @@
 [![Circle CI](https://circleci.com/gh/bogdando/packer-atlas-example.svg?style=svg)](https://circleci.com/gh/bogdando/packer-atlas-example)
 | [RabbitMQ Pacemaker OCF RA Docs](http://www.rabbitmq.com/pacemaker.html)
 | [Atlas Vagrant Boxes (Ubuntu 14.04)](https://atlas.hashicorp.com/bogdando/boxes/rabbitmq-cluster-ocf)
-| [Docker Image (Ubuntu 14.04)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf/)
 | [Docker Image (Ubuntu 15.10)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-wily/)
 | [Docker Image (Ubuntu 16.04)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-xenial/)
 | [Atlas Builds](https://atlas.hashicorp.com/bogdando/build-configurations/rabbitmq-cluster-ocf)
@@ -32,10 +31,14 @@ Builds the Vagrant Box for Atlas for the rabbitmq clustering features testing.
 See the ``rabbitmq-cluster-ocf.json`` with the post-processors section with all
 details about deploying.
 
-The ``rabbitmq-cluster-ocf-docker-wily.json`` also builds the Docker Image based
-on Ubuntu 15.10 Wily. The ``rabbitmq-cluster-ocf-docker-xenial.json`` builds
-the Docker Image based on Ubuntu 16.04 Xenial.
+The ``rabbitmq-cluster-ocf-docker-ubuntu.json`` also builds a Docker Image based
+on Ubuntu 15.10 Wily or 16.04 Xenial. Setup the `base` env var as either `wily` or
+`xenial` to get the required build type, for example:
 
+```
+$headless=true base=wily packer build -only=docker -color=false \
+rabbitmq-cluster-ocf-docker-ubuntu.json
+```
 
 ## Vagrantfile
 

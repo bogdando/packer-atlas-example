@@ -1,6 +1,7 @@
 {
   "variables": {
     "version": "0.0.1",
+    "base": "{{env `base`}}",
     "cm": "puppet",
     "cm_version": "",
     "cleanup_pause": "",
@@ -24,7 +25,7 @@
   },
   "builders": [{
     "type": "docker",
-    "image": "ubuntu:wily",
+    "image": "ubuntu:{{user `base`}}",
     "commit": true,
     "run_command": [
       "-ti",
@@ -46,6 +47,7 @@
     ]}, {
     "type": "shell",
     "environment_vars": [
+      "BASE={{user `base`}}",
       "CM={{user `cm`}}",
       "CM_VERSION={{user `cm_version`}}",
       "CLEANUP_PAUSE={{user `cleanup_pause`}}",
@@ -69,7 +71,8 @@
       "script/cmtool.sh",
       "script/docker.sh",
       "script/ha_stack.sh",
-      "script/crmsh_wily.sh",
+      "script/crmsh.sh",
+      "script/erlang.sh",
       "script/rabbitmq.sh",
       "script/minimize.sh",
       "script/cleanup.sh"
@@ -79,7 +82,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "bogdando/rabbitmq-cluster-ocf-wily",
+        "repository": "bogdando/rabbitmq-cluster-ocf-{{user `base`}}",
         "tag": "latest",
         "keep_input_artifact": false
       },

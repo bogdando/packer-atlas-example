@@ -6,6 +6,7 @@
 | [Docker Image (Ubuntu 15.10)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-wily/)
 | [Docker Image (Ubuntu 16.04)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-xenial/)
 | [Atlas Builds](https://atlas.hashicorp.com/bogdando/build-configurations/rabbitmq-cluster-ocf)
+| [Vagrantfile for a fast cluster](https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant)
 
 This is a RabbitMQ clustered node template to build a Vagrant Box and
 a Docker Image with Packer and push it to Atlas/DockerHub.
@@ -42,8 +43,8 @@ rabbitmq-cluster-ocf-docker-ubuntu.json
 
 ## Vagrantfile
 
-Moved to the https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant .
-It allows to bootstrap a cluster and perform a smoke test.
+Moved [here](https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant).
+It allows to bootstrap a cluster and perform smoke/jepsen tests.
 
 ## Acknowledgements
 

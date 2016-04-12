@@ -1,6 +1,7 @@
 {
   "variables": {
     "version": "0.0.1",
+    "base": "trusty",
     "cm": "puppet",
     "cm_version": "",
     "cleanup_pause": "",
@@ -14,8 +15,8 @@
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "rsync_proxy": "{{env `rsync_proxy`}}",
     "no_proxy": "{{env `no_proxy`}}",
-    "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso",
-    "iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
+    "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.4-server-amd64.iso",
+    "iso_checksum": "2ac1f3e0de626e54d05065d6f549fa3a",
     "custom_script": ".",
     "disk_size": "5000",
     "mem_size": "512",
@@ -108,6 +109,7 @@
   "provisioners": [{
     "type": "shell",
     "environment_vars": [
+      "BASE={{user `base`}}",
       "CM={{user `cm`}}",
       "CM_VERSION={{user `cm_version`}}",
       "CLEANUP_PAUSE={{user `cleanup_pause`}}",
@@ -125,10 +127,12 @@
     "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
     "scripts": [
       "script/update.sh",
+      "script/tools.sh",
       "script/vagrant.sh",
       "script/sshd.sh",
       "script/cmtool.sh",
       "script/ha_stack.sh",
+      "script/erlang.sh",
       "script/rabbitmq.sh",
       "script/vmtool.sh",
       "script/minimize.sh",

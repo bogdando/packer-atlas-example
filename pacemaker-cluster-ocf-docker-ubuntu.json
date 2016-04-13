@@ -1,0 +1,89 @@
+{
+  "variables": {
+    "base": "{{env `base`}}",
+    "cm": "puppet",
+    "cm_version": "",
+    "cleanup_pause": "",
+    "headless": "{{env `headless`}}",
+    "update": "true",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "install_vagrant_key": "true",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "ftp_proxy": "{{env `ftp_proxy`}}",
+    "rsync_proxy": "{{env `rsync_proxy`}}",
+    "no_proxy": "{{env `no_proxy`}}",
+    "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso",
+    "iso_checksum": "9e5fecc94b3925bededed0fdca1bd417",
+    "custom_script": ".",
+    "disk_size": "5000",
+    "mem_size": "512",
+    "vcpu_num": "1",
+    "cleanup": "false"
+  },
+  "builders": [{
+    "type": "docker",
+    "image": "ubuntu:{{user `base`}}",
+    "commit": true,
+    "run_command": [
+      "-ti",
+      "--privileged",
+      "-v",
+      "/sys/fs/cgroup:/sys/fs/cgroup",
+      "-v",
+      "/var/run/docker.sock:/var/run/docker.sock",
+      "-d",
+      "{{.Image}}",
+      "/bin/bash"
+    ]
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "execute_command": "echo 'vagrant' | sh '{{.Path}}'",
+    "scripts": [
+      "script/sudo.sh"
+    ]}, {
+    "type": "shell",
+    "environment_vars": [
+      "BASE={{user `base`}}",
+      "CM={{user `cm`}}",
+      "CM_VERSION={{user `cm_version`}}",
+      "CLEANUP_PAUSE={{user `cleanup_pause`}}",
+      "UPDATE={{user `update`}}",
+      "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
+      "SSH_USERNAME={{user `ssh_username`}}",
+      "SSH_PASSWORD={{user `ssh_password`}}",
+      "http_proxy={{user `http_proxy`}}",
+      "https_proxy={{user `https_proxy`}}",
+      "ftp_proxy={{user `ftp_proxy`}}",
+      "rsync_proxy={{user `rsync_proxy`}}",
+      "no_proxy={{user `no_proxy`}}",
+      "cleanup={{user `cleanup`}}"
+    ],
+    "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+    "scripts": [
+      "script/update.sh",
+      "script/tools.sh",
+      "script/vagrant.sh",
+      "script/sshd.sh",
+      "script/cmtool.sh",
+      "script/docker.sh",
+      "script/ha_stack.sh",
+      "script/crmsh.sh",
+      "script/minimize.sh",
+      "script/cleanup.sh"
+    ]
+  }],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "bogdando/pacemaker-cluster-ocf-{{user `base`}}",
+        "tag": "latest",
+        "keep_input_artifact": false
+      },
+      "docker-push"
+    ]
+  ]
+}

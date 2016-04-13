@@ -5,7 +5,7 @@ machine:
 
   environment:
     PACKER_VERSION: 0.8.6
-    PUSH: true
+    PUSH: false
 
 dependencies:
   pre:

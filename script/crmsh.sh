@@ -20,4 +20,5 @@ case "${distro}" in
     exit 1
   ;;
 esac
+sync
 exit 0

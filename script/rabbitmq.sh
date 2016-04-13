@@ -15,3 +15,4 @@ cp -f /tmp/rabbitmq-server-ha /usr/lib/ocf/resource.d/rabbitmq/
 
 # stop and disable rabbitmq-server, assumes puppet CM installed
 puppet apply -e "service {'rabbitmq-server': ensure=>stopped, enable=>false }"
+sync

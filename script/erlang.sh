@@ -8,4 +8,5 @@ echo "erlang-solutions deb/distro string ${distro}" | \
   debconf-set-selections | dpkg -i /tmp/erlang-solutions_1.0_all.deb
 apt-get -y update
 DEBIAN_FRONTEND=noninteractive apt-get -y install erlang-nox
+sync
 exit 0

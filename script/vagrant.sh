@@ -31,3 +31,4 @@ if [ "$INSTALL_VAGRANT_KEY" = "true" ] || [ "$INSTALL_VAGRANT_KEY" = "1" ]; then
     chmod 600 $SSH_USER_HOME/.ssh/authorized_keys
     chown -R $SSH_USER:$SSH_USER $SSH_USER_HOME/.ssh
 fi
+sync

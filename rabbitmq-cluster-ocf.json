@@ -109,6 +109,7 @@
   "provisioners": [{
     "type": "shell",
     "environment_vars": [
+      "VERSION={{user `version`}}",
       "BASE={{user `base`}}",
       "CM={{user `cm`}}",
       "CM_VERSION={{user `cm_version`}}",

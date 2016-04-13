@@ -19,18 +19,13 @@ fi
 # Ubuntu 12.04 & 14.04
 if [ -d "/var/lib/dhcp" ]; then
     rm /var/lib/dhcp/*
-fi 
+fi
 
 # Add delay to prevent "vagrant reload" from failing
 echo "pre-up sleep 2" >> /etc/network/interfaces
 
 echo "==> Cleaning up tmp"
 rm -rf /tmp/*
-
-# Cleanup apt cache
-apt-get -y autoremove --purge
-apt-get -y clean
-apt-get -y autoclean
 
 echo "==> Installed packages"
 dpkg --get-selections | grep -v deinstall

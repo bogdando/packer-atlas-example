@@ -16,4 +16,5 @@ tcpdump
 strace
 "
 apt-get -y install $PACKAGES
+sync
 exit 0

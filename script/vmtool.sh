@@ -50,3 +50,4 @@ fi
 if [[ $PACKER_BUILDER_TYPE =~ libvirt ]]; then
     echo "==> Doing nothing special"
 fi
+sync

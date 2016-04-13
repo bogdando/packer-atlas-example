@@ -46,6 +46,14 @@ rabbitmq-cluster-ocf-docker-ubuntu.json
 If you want to build only a Corosync/Pacemaker cluster setup on top of
 Ubuntu, use the ``pacemaker-cluster-ocf-docker-ubuntu.json``.
 
+## Caching for builds
+
+There are distro base specific shared volumes for docker build templates. For Ubuntu,
+those are mounts for `/var/cache` and /var/lib/apt`. For example, for ``base=wily``,
+the volumes `lib_apt_wily` and `cache_wily` will be used across consequent
+packer builds, hopefully making things faster. If something is wrong, just
+remove the volumes to be rebuilt from the scratch.
+
 ## Vagrantfile
 
 Moved [here](https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant).

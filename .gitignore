@@ -1,4 +1,9 @@
 *.swp
 *~
+./pcs
+./crmsh
+./corosync
+./pacemaker
+./libqb
 packer_*
 .vagrant

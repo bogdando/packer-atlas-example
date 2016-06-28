@@ -1,0 +1,48 @@
+{
+  "variables": {
+    "base": "{{env `base`}}",
+    "wanted": "{{env `wanted`}}",
+    "headless": "{{env `headless`}}",
+    "repo_path": "{{env `repo_path`}}"
+  },
+  "builders": [{
+    "type": "docker",
+    "image": "{{user `base`}}",
+    "commit": true,
+    "run_command": [
+      "-ti",
+      "-v",
+      "{{user `repo_path`}}:/repo",
+      "-v",
+      "lib_apt_{{user `wanted`}}:/var/lib/apt/",
+      "-v",
+      "cache_{{user `wanted`}}:/var/cache/",
+      "-d",
+      "{{.Image}}",
+      "/bin/bash"
+    ]
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "environment_vars": [
+      "WANTED={{user `wanted`}}"
+    ],
+    "execute_command": "{{.Vars}} sh '{{.Path}}'",
+    "scripts": [
+      "script/tools_min.sh",
+      "script/build.sh"
+    ]
+  }],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "only": ["docker"],
+        "repository": "bogdando/{{user `wanted`}}",
+        "tag": "latest",
+        "keep_input_artifact": false
+      },
+      "docker-push"
+    ]
+  ]
+}

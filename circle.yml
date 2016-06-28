@@ -10,6 +10,7 @@ machine:
 dependencies:
   pre:
     - >
+      [ "${PUSH}" = "true" ] &&
       sudo apt-get install -qq wget unzip &&
       sudo mkdir /opt/packer &&
       pushd /opt/packer &&
@@ -20,6 +21,7 @@ dependencies:
       sudo rm packer_${PACKER_VERSION}_linux_amd64.zip &&
       pushd /usr/bin &&
       sudo ln -s /opt/packer/* .
+      fi
 
 test:
   override:

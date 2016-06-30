@@ -8,6 +8,7 @@ apt-get update || exit 1
 echo 'APT::Install-Suggests "0";' > /etc/apt/apt.conf.d/99local
 echo 'APT::Install-Recommends "0";' >> /etc/apt/apt.conf.d/99local
 PACKAGES="
+sudo
 curl
 rsyslog
 psmisc
@@ -21,6 +22,8 @@ rsync
 strace
 lsof
 tcpdump
+vim
+git
 "
 apt-get -y install $PACKAGES
 mkdir -p /var/run/sshd

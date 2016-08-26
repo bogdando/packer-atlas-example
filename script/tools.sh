@@ -14,6 +14,7 @@ vim
 screen
 tcpdump
 strace
+sshpass
 "
 apt-get -y install $PACKAGES
 sync

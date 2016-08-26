@@ -1,7 +1,6 @@
 # RabbitMQ cluster OCF packer template
 
 [![Circle CI](https://circleci.com/gh/bogdando/packer-atlas-example.svg?style=svg)](https://circleci.com/gh/bogdando/packer-atlas-example)
-| [RabbitMQ Cluster Atlas Vagrant Boxes (Ubuntu 14.04, DEPRECATED)](https://atlas.hashicorp.com/bogdando/boxes/rabbitmq-cluster-ocf)
 | [RabbitMQ Cluster Docker VM Image (Ubuntu 16.04)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-xenial/)
 | [Vagrantfile for a fast RabbitMQ cluster](https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant)
 | [Pacemaker Cluster Docker App Image (Ubuntu 16.04)](https://hub.docker.com/r/bogdando/pacemaker-cluster-ocf-xenial/)
@@ -27,13 +26,14 @@ See the `circle.yml` for details how the glue works. It just installs packer
 0.8.1, enables docker service, and starts the `packer push`, if pushing is
 enabled.
 
+NOTE: Packer script to build Atlas boxes was removed from the repo, the job is
+disabled. Scripts switched to docker only builders, w/o build automation,
+it is TBD, maybe.
+
 ## RabbitMQ and Pacemaker VM nodes packer templates
 
-Builds the Vagrant Box for Atlas for the rabbitmq clustering features testing.
-See the ``rabbitmq-cluster-ocf.json`` with the post-processors section with all
-details about deploying.
-
-The ``rabbitmq-cluster-ocf-docker-ubuntu.json`` also builds a Docker VM image
+Builds a docker image for the RabbitMQ RA OCF clustering features testing.
+The ``rabbitmq-cluster-ocf-docker-ubuntu.json`` builds a Docker VM image
 based on Ubuntu 15.10 Wily (deprecated) or 16.04 Xenial with Erlang, RabbitMQ and some
 other packages. Setup the `base` env var as either `wily` or `xenial`
 to get the required build type, for example:

@@ -15,6 +15,7 @@ screen
 tcpdump
 strace
 sshpass
+socat
 "
 apt-get -y install $PACKAGES
 sync

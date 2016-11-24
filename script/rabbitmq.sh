@@ -1,17 +1,15 @@
 #!/bin/bash -eux
 
 PACKAGES="
-rabbitmq-server
 wget
 "
 # Install corosync with pacemaker
 apt-get -y install $PACKAGES
 
-# FIXME(bogdando) remove after the rabbitmq-server v3.5.7 released and got to the UCA
-wget https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/stable/scripts/rabbitmq-server-ha.ocf \
--O /tmp/rabbitmq-server-ha
-chmod +x /tmp/rabbitmq-server-ha
-cp -f /tmp/rabbitmq-server-ha /usr/lib/ocf/resource.d/rabbitmq/
+ver=3.6.5
+file="rabbitmq-server_${ver}-1_all.deb"
+wget "http://www.rabbitmq.com/releases/rabbitmq-server/v${ver}/${file}" -O "/tmp/${file}"
+dpkg -i "/tmp/${file}"
 
 # stop and disable rabbitmq-server, assumes puppet CM installed
 puppet apply -e "service {'rabbitmq-server': ensure=>stopped, enable=>false }"

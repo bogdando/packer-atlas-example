@@ -27,23 +27,17 @@ apt-get -y purge ppp pppconfig pppoeconf
 echo "==> Removing other oddities"
 apt-get -y purge popularity-contest installation-report landscape-common wireless-tools wpasupplicant ubuntu-serverguide
 
-# NOTE(bogdando) Don't do reboot/sleep when used from docker templates.
-# only atlas templates define the VERSION.
-if [ "${VERSION}" ]; then
-  # Clean up the apt cache
-  apt-get -y autoremove --purge
-  apt-get -y autoclean
-  apt-get -y clean
-fi
+# Clean up the apt cache
+apt-get -y autoremove --purge
+apt-get -y autoclean
+apt-get -y clean
 
-if [ "${cleanup}" = "true" ]; then
-  # Clean up orphaned packages with deborphan
-  apt-get -y install deborphan
-  while [ -n "$(deborphan --guess-all --libdevel)" ]; do
-      deborphan --guess-all --libdevel | xargs apt-get -y purge
-  done
-  apt-get -y purge deborphan dialog
-fi
+# Clean up orphaned packages with deborphan
+apt-get -y install deborphan
+while [ -n "$(deborphan --guess-all --libdevel)" ]; do
+  deborphan --guess-all --libdevel | xargs apt-get -y purge
+done
+apt-get -y purge deborphan dialog
 
 echo "==> Removing man pages"
 rm -rf /usr/share/man/*
@@ -51,10 +45,8 @@ echo "==> Removing anything in /usr/src"
 rm -rf /usr/src/*
 echo "==> Removing any docs"
 rm -rf /usr/share/doc/*
-if [ "${VERSION}" ]; then
-  echo "==> Removing caches"
-  find /var/cache -type f -exec rm -rf {} \;
-  echo "==> Removing APT files"
-  find /var/lib/apt -type f | xargs rm -f
-fi
+echo "==> Removing caches"
+find /var/cache -type f -exec rm -rf {} \;
+echo "==> Removing APT files"
+find /var/lib/apt -type f | xargs rm -f
 sync

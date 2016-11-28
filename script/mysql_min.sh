@@ -16,9 +16,7 @@ mysql-common
 netcat-openbsd
 galera-3
 gawk
-libmariadbclient18
 libmpfr4
-libmysqlclient18
 libreadline5
 libsigsegv2
 mariadb-common

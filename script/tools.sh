@@ -1,6 +1,7 @@
 #!/bin/bash -eux
 
 PACKAGES="
+rsync
 make
 curl
 git
@@ -17,6 +18,6 @@ strace
 sshpass
 socat
 "
-apt-get -y install $PACKAGES
+apt-get -y --no-install-recommends install $PACKAGES
 sync
 exit 0

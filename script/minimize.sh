@@ -36,12 +36,14 @@ if [ "${VERSION}" ]; then
   apt-get -y clean
 fi
 
-# Clean up orphaned packages with deborphan
-apt-get -y install deborphan
-while [ -n "$(deborphan --guess-all --libdevel)" ]; do
-    deborphan --guess-all --libdevel | xargs apt-get -y purge
-done
-apt-get -y purge deborphan dialog
+if [ "${cleanup}" = "true" ]; then
+  # Clean up orphaned packages with deborphan
+  apt-get -y install deborphan
+  while [ -n "$(deborphan --guess-all --libdevel)" ]; do
+      deborphan --guess-all --libdevel | xargs apt-get -y purge
+  done
+  apt-get -y purge deborphan dialog
+fi
 
 echo "==> Removing man pages"
 rm -rf /usr/share/man/*

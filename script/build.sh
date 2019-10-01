@@ -19,6 +19,8 @@ copy_sources () {
 build_libqb () {
   getent group haclient >/dev/null || groupadd -r haclient
   getent passwd hacluster >/dev/null || useradd -r -g haclient -d /var/lib/heartbeat/cores/hacluster -s /sbin/nologin -c "cluster user" hacluster
+  # Need those to generate the service/unit files only
+  apt-get -y install corosync pacemaker cluster-glue
   # libqb requirements
   apt-get -y install automake make autoconf autogen pkg-config libgtk-3-dev libtool rsync
   # corosync requirements

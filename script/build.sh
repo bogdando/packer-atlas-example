@@ -34,6 +34,7 @@ build_libqb () {
 # a layer to be based on the libqb
 build_corosync () {
   export GROFF=echo
+  apt-get -y install libknet-dev
   copy_sources corosync
   build
 }

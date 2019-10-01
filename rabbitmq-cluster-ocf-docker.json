@@ -52,7 +52,6 @@
       "script/crmsh.sh",
       "script/erlang.sh",
       "script/rabbitmq.sh",
-      "script/minimize.sh",
       "script/cleanup.sh"
     ]
   }],

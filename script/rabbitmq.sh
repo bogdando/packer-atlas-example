@@ -2,6 +2,7 @@
 
 PACKAGES="
 wget
+logrotate
 "
 # Install corosync with pacemaker
 apt-get -y install $PACKAGES

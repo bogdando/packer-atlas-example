@@ -38,6 +38,7 @@ build_corosync () {
 
 # a layer to be based on the corosync and libqb
 build_pacemaker () {
+  apt-get -y install libcmap-dev libquorum-dev
   copy_sources pacemaker
   lddconfig -v
   build

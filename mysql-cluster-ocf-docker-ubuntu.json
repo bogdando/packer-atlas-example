@@ -1,5 +1,6 @@
 {
   "variables": {
+    "prebuilt": "{{env `prebuilt`}}",
     "base": "{{env `base`}}",
     "headless": "{{env `headless`}}",
     "ssh_username": "vagrant",
@@ -8,7 +9,7 @@
   },
   "builders": [{
     "type": "docker",
-    "image": "ubuntu:{{user `base`}}",
+    "image": "{{user `base`}}",
     "commit": true,
     "run_command": [
       "-ti",
@@ -17,10 +18,6 @@
       "/sys/fs/cgroup:/sys/fs/cgroup",
       "-v",
       "/var/run/docker.sock:/var/run/docker.sock",
-      "-v",
-      "lib_apt_{{user `base`}}:/var/lib/apt/",
-      "-v",
-      "cache_{{user `base`}}:/var/cache/",
       "-d",
       "{{.Image}}",
       "/bin/bash"
@@ -34,6 +31,7 @@
     ]}, {
     "type": "shell",
     "environment_vars": [
+      "PREBUILT={{user `prebuilt`}}",
       "BASE={{user `base`}}",
       "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
       "SSH_USERNAME={{user `ssh_username`}}",
@@ -55,7 +53,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "bogdando/mysql-cluster-ocf-{{user `base`}}",
+        "repository": "bogdando/mysql-cluster-ocf",
         "tag": "latest",
         "keep_input_artifact": false
       },

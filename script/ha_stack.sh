@@ -1,5 +1,10 @@
 #!/bin/bash -eux
 
+if [ "${PREBUILT}:-" ]; then
+PACKAGES="
+resource-agents
+"
+else
 PACKAGES="
 crmsh
 pacemaker
@@ -8,6 +13,7 @@ cluster-glue
 resource-agents
 libqb0
 "
+fi
 # Install corosync with pacemaker
 apt-get -y install $PACKAGES
 

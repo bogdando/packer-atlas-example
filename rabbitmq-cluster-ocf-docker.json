@@ -1,5 +1,6 @@
 {
   "variables": {
+    "prebuilt": "{{env `prebuilt`}}",
     "base": "{{env `base`}}",
     "cm": "puppet",
     "cm_version": "",
@@ -10,7 +11,7 @@
   },
   "builders": [{
     "type": "docker",
-    "image": "ubuntu:{{user `base`}}",
+    "image": "{{user `base`}}",
     "commit": true,
     "run_command": [
       "-ti",
@@ -19,10 +20,6 @@
       "/sys/fs/cgroup:/sys/fs/cgroup",
       "-v",
       "/var/run/docker.sock:/var/run/docker.sock",
-      "-v",
-      "lib_apt_{{user `base`}}:/var/lib/apt/",
-      "-v",
-      "cache_{{user `base`}}:/var/cache/",
       "-d",
       "{{.Image}}",
       "/bin/bash"
@@ -36,6 +33,7 @@
     ]}, {
     "type": "shell",
     "environment_vars": [
+      "PREBUILT={{user `prebuilt`}}",
       "BASE={{user `base`}}",
       "CM={{user `cm`}}",
       "CM_VERSION={{user `cm_version`}}",
@@ -62,7 +60,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "bogdando/rabbitmq-cluster-ocf-{{user `base`}}",
+        "repository": "bogdando/rabbitmq-cluster-ocf",
         "tag": "latest",
         "keep_input_artifact": false
       },

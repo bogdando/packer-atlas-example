@@ -32,19 +32,23 @@ it is TBD, maybe.
 
 ## RabbitMQ and Pacemaker VM nodes packer templates
 
-Builds a docker image for the RabbitMQ RA OCF clustering features testing.
-The ``rabbitmq-cluster-ocf-docker-ubuntu.json`` builds a Docker VM image
-based on Ubuntu 15.10 Wily (deprecated) or 16.04 Xenial with Erlang, RabbitMQ and some
-other packages. Setup the `base` env var as either `wily` or `xenial`
+Builds a docker image for the RabbitMQ RA OCF clustering features testing.  The
+``rabbitmq-cluster-ocf-docker.json`` builds a Docker VM image either based on a
+prebuilt image with Linux HA stack or some other image, like Ubuntu 16.04 Xenial
+maybe/whatnot, with Erlang, RabbitMQ and some other packages. Setup the `base`
+env var as either `ubuntu:xenial` or optionally use `base=bogdando/pcscrm prebuilt=1`
 to get the required build type, for example:
 
 ```
-$headless=true base=wily packer build -only=docker -color=false \
-rabbitmq-cluster-ocf-docker-ubuntu.json
+$headless=true base=ubuntu:xenial packer build -only=docker -color=false \
+rabbitmq-cluster-ocf-docker.json
+
+$base=12345 prebuilt=yes packer build -only=docker \
+rabbitmq-cluster-ocf-docker.json
 ```
 
-If you want to build only a Corosync/Pacemaker node on top of
-Ubuntu base, use the ``pacemaker-cluster-ocf-docker-ubuntu.json``.
+If you don't have a prebuilt image but want to install only a Corosync/Pacemaker from
+packages use ``pacemaker-cluster-ocf-docker.json``.
 
 ## Corosync/Pacemaker apps and CLI tools packer templates
 

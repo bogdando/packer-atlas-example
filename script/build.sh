@@ -48,11 +48,12 @@ build_pacemaker () {
 build_pcscrm () {
   copy_sources crmsh
   apt-get -y install python-setuptools python-lxml python-yaml python-nosexcover python-dateutil python-pip
-  pip install parallax
+  apt-get -y install python3-setuptools python3-lxml python3-openssl python3-tornado python3-yaml python3-nosexcover python3-dateutil python3-pip psmisc python3-pycurl
+  pip3 install parallax
   build
 
   copy_sources pcs
-  python setup.py build && python setup.py install
+  python3 setup.py build && python3 setup.py install
   test -f /usr/sbin/crm_mon  || ln -s /sbin/crm_mon /usr/sbin/crm_mon
 }
 

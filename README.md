@@ -62,8 +62,8 @@ The build chain is supposed to be as the following:
 * To build the libqb libs container, use `base=debian:latest wanted=libqb`
   (or `base=bogdando/libqb`, if you don't want to go from the clean debian again)
 * To build the corosync, use `base=bogdando/libqb wanted=corosync`
-* To build the pacemaker container, use `base=bogdando/corosync base wanted=pacemaker`
-* And for the pcssrm runner container, use `base=bogdando/libqb wanted=pcssrm`.
+* To build the pacemaker container, use `base=bogdando/corosync wanted=pacemaker`
+* And for the pcssrm runner container, use `base=bogdando/pacemaker wanted=pcscrm`.
 
 Note, you can try to build the runner from another bases, although it might
 require additional dependencies to be installed.
@@ -80,8 +80,9 @@ $headless=true base=bogdando/corosync wanted=corosync \
 repo_path=/home/fuser/gitrepos/ packer build ha-stack-docker-debian.json
 ```
 
-Make sure the required source repos (or a signed tarballs), which is
-ones for a libqb, corosync, pacemaker, crmsh and pcs present at a given `repo_path`.
+Make sure the required source repos (or extracted signed tarballs), which is
+ones for a libqb, corosync, pacemaker, crmsh and pcs (named exactly the same way
+as listed here) present at a given `repo_path`.
 Also use the `rebuild-ha-stack.sh` script to rebuild all but the pcscrm.
 
 ## Caching for builds

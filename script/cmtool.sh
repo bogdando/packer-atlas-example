@@ -69,7 +69,7 @@ install_puppet()
     echo "==> Installing Puppet"
     . /etc/lsb-release
 
-    DEB_NAME=puppetlabs-release-${DISTRIB_CODENAME}.deb
+    DEB_NAME=puppet6-release-$(lsb_release -c -s).deb
     wget http://apt.puppetlabs.com/${DEB_NAME}
     dpkg -i ${DEB_NAME}
     apt-get update

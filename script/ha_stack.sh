@@ -41,5 +41,6 @@ crm_node -f -R $(crm_node -i)
 cibadmin --delete --xml-text '<node/>'
 cibadmin --delete --xml-text '<node_state/>'
 
+puppet module install openstack-pacemaker
 sync
 exit 0

@@ -1,6 +1,6 @@
 #!/bin/bash -ux
 
-if [ "${PREBUILT}:-" ]; then
+if [ "${PREBUILT}:-" = 'true' ]; then
 PACKAGES="
 resource-agents
 "

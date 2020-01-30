@@ -45,7 +45,6 @@
       "script/cmtool.sh",
       "script/docker.sh",
       "script/ha_stack.sh",
-      "script/crmsh.sh",
       "script/minimize.sh",
       "script/cleanup.sh"
     ]

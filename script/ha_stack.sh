@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash -ux
 
 if [ "${PREBUILT}:-" ]; then
 PACKAGES="
@@ -6,6 +6,7 @@ resource-agents
 "
 else
 PACKAGES="
+pcs
 crmsh
 pacemaker
 corosync

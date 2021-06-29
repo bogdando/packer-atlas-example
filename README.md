@@ -11,23 +11,12 @@ For Packer to Atlas and CI integration examples, see
 [Stefan Scherer's blog post](https://stefanscherer.github.io/automate-building-vagrant-boxes-with-atlas/).
 
 The automated build is triggered by a WebHook in GitHub to start a build in
-CircleCI that triggers a packer build and pushes with `packer push` which
-builds an Atlas box.
-FIXME(bogdando) pushing is working only to atlas at the moment.
-A Docker Hub autobuilds TBD, maybe.
-
-* To disable or enable `push all`, set the `PUSH` param in the ``circle.yaml``
-  to `false` or `true`.
+CircleCI that triggers a packer build and pushes the produced container image
+to DockerHub.
 
 ## CircleCI template
 
-See the `circle.yml` for details how the glue works. It just installs packer
-0.8.1, enables docker service, and starts the `packer push`, if pushing is
-enabled.
-
-NOTE: Packer script to build Atlas boxes was removed from the repo, the job is
-disabled. Scripts switched to docker only builders, w/o build automation,
-it is TBD, maybe.
+See the `.circleci/config.yml` for details how the glue works.
 
 ## RabbitMQ and Pacemaker VM nodes packer templates
 

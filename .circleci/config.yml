@@ -1,0 +1,44 @@
+version: 2.1
+workflows:
+  build_push:
+    jobs:
+      - build:
+          context:
+            - DOCKER
+jobs:
+  build:
+    machine:
+      image: ubuntu-2004:202104-01    
+
+    environment:
+      PACKER_VERSION: 1.4.3
+      FILE: rabbitmq-cluster-ocf-docker-no-push.json
+      BASE: debian:latest
+      IMAGE: bogdando/rabbitmq-cluster-ocf
+      TAG: testing
+    
+    steps:
+      - checkout
+      - run:
+          name: get packer and required packages
+          command: >
+            sudo apt install -qq wget unzip;
+            sudo mkdir /opt/packer;
+            pushd /opt/packer;
+            sudo wget --no-verbose https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip;
+            sudo unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /opt/packer;
+            sudo rm packer_${PACKER_VERSION}_linux_amd64.zip;
+            pushd /usr/bin;
+            sudo ln -s /opt/packer/* .
+      - run:
+          name: build with packer
+          command: > 
+            headless=true base="$BASE" tag="$TAG"
+            packer build -only=docker -color=true "$FILE"
+
+      - run:
+          name: push the built image
+          command: >
+            trap 'rm -f /home/circleci/.docker/config.json' EXIT INT HUP TERM STOP;
+            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin;
+            docker push "${IMAGE}:${TAG}" || docker push "docker.io/${IMAGE}:${TAG}"

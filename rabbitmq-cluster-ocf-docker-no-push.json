@@ -8,7 +8,7 @@
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
     "install_vagrant_key": "true",
-    "tag": "latest"
+    "tag": "{{ env `tag`}}"
   },
   "builders": [{
     "type": "docker",
@@ -60,9 +60,8 @@
         "type": "docker-tag",
         "repository": "bogdando/rabbitmq-cluster-ocf",
         "tag": "{{user `tag`}}",
-        "keep_input_artifact": false
-      },
-      "docker-push"
+        "keep_input_artifact": true
+      }
     ]
   ]
 }

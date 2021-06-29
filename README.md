@@ -1,9 +1,8 @@
 # RabbitMQ cluster OCF packer template
 
 [![Circle CI](https://circleci.com/gh/bogdando/packer-atlas-example.svg?style=svg)](https://circleci.com/gh/bogdando/packer-atlas-example)
-| [RabbitMQ Cluster Docker VM Image (Ubuntu 16.04)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf-xenial/)
+| [RabbitMQ Cluster Docker VM Image (Debian)](https://hub.docker.com/r/bogdando/rabbitmq-cluster-ocf/)
 | [Vagrantfile for a fast RabbitMQ cluster](https://github.com/bogdando/rabbitmq-cluster-ocf-vagrant)
-| [Pacemaker Cluster Docker App Image (Ubuntu 16.04)](https://hub.docker.com/r/bogdando/pacemaker-cluster-ocf-xenial/)
 
 This is a collection of packer templates for a RabbitMQ/Pacemaker VM nodes and docker VM-like containers.
 It also contains templates to build a Libqb/Corosync/Pacemaker (Linux HA stack) as a lightweight docker apps.
@@ -34,23 +33,23 @@ it is TBD, maybe.
 
 Builds a docker image for the RabbitMQ RA OCF clustering features testing.  The
 ``rabbitmq-cluster-ocf-docker.json`` builds a Docker VM image either based on a
-prebuilt image with Linux HA stack or some other image, like Ubuntu 16.04 Xenial
-maybe/whatnot, with Erlang, RabbitMQ and some other packages. Setup the `base`
-env var as either `ubuntu:xenial` or optionally use `base=bogdando/pcscrm prebuilt=1`
-to get the required build type, for example:
+prebuilt image with Linux HA stack or some other image, with Erlang, RabbitMQ
+and some other packages. Setup the `base` env var as either `debian:latest` or
+optionally use `base=bogdando/pcscrm prebuilt=1` to get the required build type,
+for example:
 
 ```
-$headless=true base=ubuntu:xenial packer build -only=docker -color=false \
+$headless=true base=debian:latest packer build -only=docker -color=false \
 rabbitmq-cluster-ocf-docker.json
 
-$base=12345 prebuilt=yes packer build -only=docker \
+$base=ubuntu:latest prebuilt=yes packer build -only=docker \
 rabbitmq-cluster-ocf-docker.json
 ```
 
 If you don't have a prebuilt image but want to install only a Corosync/Pacemaker from
 packages use ``pacemaker-cluster-ocf-docker.json``.
 
-## Corosync/Pacemaker apps and CLI tools packer templates
+## Corosync/Pacemaker apps and CLI tools packer templates (obsolete/no longer used)
 
 Builds from trunc the DockerHub images for a Corosync/Pacemaker apps and a runner
 container containing related HA stack/generic tools like pcs, crm, wget, iptables.
@@ -75,13 +74,13 @@ require additional dependencies to be installed.
 F.e. to "rebase" the corosync on top of the changed libqb, run:
 ```
 $headless=true base=bogdando/libqb wanted=corosync \
-repo_path=/home/fuser/gitrepos/ packer build ha-stack-docker-debian.json
+repo_path=/home/fuser/gitrepos/ packer build ha-stack-docker.json
 ```
 
 And to rebuild the corosync leaving the libqb base as is, use:
 ```
 $headless=true base=bogdando/corosync wanted=corosync \
-repo_path=/home/fuser/gitrepos/ packer build ha-stack-docker-debian.json
+repo_path=/home/fuser/gitrepos/ packer build ha-stack-docker.json
 ```
 
 Make sure the required source repos (or extracted signed tarballs), which is
@@ -92,8 +91,8 @@ Also use the `rebuild-ha-stack.sh` script to rebuild all but the pcscrm.
 ## Caching for builds
 
 There are distro base specific shared volumes for docker build templates. For Ubuntu,
-those are mounts for `/var/cache` and /var/lib/apt`. For example, for ``base=wily``,
-the volumes `lib_apt_wily` and `cache_wily` will be used across consequent
+those are mounts for `/var/cache` and /var/lib/apt`. For example, for ``base=foo``,
+the volumes ``lib_apt_foo`` and ``cache_foo`` will be used across consequent
 packer builds, hopefully making things faster. If something is wrong, just
 remove the volumes to be rebuilt from the scratch.
 

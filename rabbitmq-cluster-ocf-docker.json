@@ -7,7 +7,8 @@
     "headless": "{{env `headless`}}",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "install_vagrant_key": "true"
+    "install_vagrant_key": "true",
+    "tag": "latest"
   },
   "builders": [{
     "type": "docker",
@@ -58,7 +59,7 @@
       {
         "type": "docker-tag",
         "repository": "bogdando/rabbitmq-cluster-ocf",
-        "tag": "latest",
+        "tag": "{{user `tag`}}",
         "keep_input_artifact": false
       },
       "docker-push"

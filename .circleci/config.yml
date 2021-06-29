@@ -4,7 +4,7 @@ machine:
     - docker
 
   environment:
-    PACKER_VERSION: 0.8.6
+    PACKER_VERSION: 1.7.3
     PUSH: false
 
 dependencies:
@@ -33,5 +33,5 @@ deployment:
     commands:
       - >
         if [ "${PUSH}" = "true" ] ;
-        then packer push -name=bogdando/rabbitmq-cluster-ocf rabbitmq-cluster-ocf.json;
+          then headless=true tag=testing base=debian:latest packer build -only=docker -color=true rabbitmq-cluster-ocf-docker.json;
         fi

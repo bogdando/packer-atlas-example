@@ -12,19 +12,42 @@ apt-key adv --keyserver "keyserver.ubuntu.com" --recv-keys "F77F1EDA57EBB1CC"
 ## PackageCloud RabbitMQ repository
 curl -1sLf 'https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey' | apt-key add -
 
-tee /etc/apt/sources.list.d/rabbitmq.list <<EOF
+erlbase="debian/ buster"
+if [[ "$BASE" =~ "ubuntu" ]]; then
+  # For Erlang 24 that requires libssl1.1, use bionic
+  # For Erlang 23 / libssl1.0, use xenial
+  erlbase="ubuntu/ xenial"
+  tee /etc/apt/sources.list.d/rabbitmq-erlang-launchpad.list <<EOF
 ## Provides modern Erlang/OTP releases
 ##
 ## "bionic" as distribution name should work for any reasonably recent Ubuntu or Debian release.
-deb http://ppa.launchpad.net/rabbitmq/rabbitmq-erlang/ubuntu bionic main
-deb-src http://ppa.launchpad.net/rabbitmq/rabbitmq-erlang/ubuntu bionic main
+deb http://ppa.launchpad.net/rabbitmq/rabbitmq-erlang/${erlbase} main
+deb-src http://ppa.launchpad.net/rabbitmq/rabbitmq-erlang/${erlbase} main
+EOF
+fi
 
+tee /etc/apt/sources.list.d/rabbitmq.list <<EOF
 ## Provides RabbitMQ
 ##
-deb https://packagecloud.io/rabbitmq/rabbitmq-server/debian/ buster main
-deb-src https://packagecloud.io/rabbitmq/rabbitmq-server/debian/ buster main
+deb https://packagecloud.io/rabbitmq/rabbitmq-server/${erlbase} main
+deb-src https://packagecloud.io/rabbitmq/rabbitmq-server/${erlbase} main
 EOF
 
+if [[ "$BASE" =~ "debian" ]]; then
+  # Erlang 24 (bionic)
+  erlbase=bionic
+  # TODO: Erlang 23 (xenial) that requires libssl1.0, which is not in Debian Buster
+  #erlbase=xenial
+  curl -1sLf 'https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/gpg.E495BB49CC4BBE5B.key' | apt-key add -
+  curl -1sLf "https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/config.deb.txt?distro=ubuntu&codename=${erlbase}" > /etc/apt/sources.list.d/rabbitmq-erlang-cloudsmith.list
+
+  # Prefer erl 23 from cloudsmith
+  tee /etc/apt/preferences.d/erlang <<EOF
+Package: erlang*
+Pin: origin dl.cloudsmith.io
+Pin-Priority: 1000
+EOF
+fi
 apt-get update -y
 apt-get install -y erlang-base \
                         erlang-asn1 erlang-crypto erlang-eldap erlang-ftp erlang-inets \

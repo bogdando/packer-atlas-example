@@ -34,6 +34,7 @@
     ]}, {
     "type": "shell",
     "environment_vars": [
+      "DEBIAN_FRONTEND=noninteractive",
       "PREBUILT={{user `prebuilt`}}",
       "BASE={{user `base`}}",
       "CM={{user `cm`}}",

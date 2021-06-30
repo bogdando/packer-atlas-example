@@ -15,7 +15,7 @@ jobs:
       FILE: rabbitmq-cluster-ocf-docker-no-push.json
       BASE: debian:latest
       IMAGE: bogdando/rabbitmq-cluster-ocf
-      TAG: testing
+      TAG: buster_erl24_rmq38181
     
     steps:
       - checkout

@@ -12,7 +12,6 @@ pacemaker
 corosync
 cluster-glue
 resource-agents
-libqb0
 "
 fi
 # Install corosync with pacemaker

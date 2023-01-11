@@ -86,7 +86,7 @@ install_puppet()
     echo "==> Installing Puppet-librarian ruby gem"
     apt-get install -y make
     apt-get install -y ruby-dev
-    gem install --force librarian-puppet --no-ri --no-rdoc
+    gem install --force librarian-puppet
 }
 
 install_ansible()

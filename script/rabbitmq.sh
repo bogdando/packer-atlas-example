@@ -14,9 +14,7 @@ curl -1sLf 'https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey' | apt-key a
 
 erlbase="debian/ buster"
 if [[ "$BASE" =~ "ubuntu" ]]; then
-  # For Erlang 24 that requires libssl1.1, use bionic
-  # For Erlang 23 / libssl1.0, use xenial
-  erlbase="ubuntu/ xenial"
+  erlbase="ubuntu/ jammy"
   tee /etc/apt/sources.list.d/rabbitmq-erlang-launchpad.list <<EOF
 ## Provides modern Erlang/OTP releases
 ##
